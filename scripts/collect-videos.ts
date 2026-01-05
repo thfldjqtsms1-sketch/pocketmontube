@@ -243,13 +243,13 @@ async function collectVideos(): Promise<void> {
                     allNewVideos.push(video);
                     existingIds.add(video.id);
 
-                    // Rate limiting - 영상당 1초 대기
-                    await sleep(1000);
+                    // Rate limiting - 영상당 3초 대기 (429 방지)
+                    await sleep(3000);
                 }
             }
 
-            // 채널간 딜레이
-            await sleep(2000);
+            // 채널간 딜레이 (429 방지)
+            await sleep(5000);
         }
     }
 
@@ -272,8 +272,8 @@ async function collectVideos(): Promise<void> {
             video.viralScore = Math.round(video.viewCount / hoursAge);
         }
 
-        // Rate limiting
-        await sleep(500);
+        // Rate limiting (429 방지)
+        await sleep(2000);
     }
 
     // 새 영상 추가
