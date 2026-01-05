@@ -83,15 +83,14 @@ function formatViralVideosByGroup(videosByGroup: Map<string, { group: Group; vid
 
     let totalVideos = 0;
 
-    // 그룹별로 표 형식 출력
+    // 그룹별로 리스트 형식 출력
     for (const [groupId, { group, videos }] of videosByGroup) {
         if (videos.length === 0) continue;
 
         const icon = group.icon || '📁';
+        message += `━━━━━━━━━━━━━━━━━━━━\n`;
         message += `${icon} <b>${escapeHtml(group.name)}</b>\n`;
-        message += `┌─────┬────────────────────┬──────────┐\n`;
-        message += `│ 순위 │ 조회수              │ 바이럴    │\n`;
-        message += `├─────┼────────────────────┼──────────┤\n`;
+        message += `━━━━━━━━━━━━━━━━━━━━\n\n`;
 
         // 그룹별 표시 개수 (기본값: 3)
         const topCount = group.topCount || 3;
@@ -99,27 +98,15 @@ function formatViralVideosByGroup(videosByGroup: Map<string, { group: Group; vid
 
         displayVideos.forEach((video, index) => {
             const viralScore = video.viralScore || 0;
-            const rank = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : ` ${index + 1} `;
-            const views = formatNumber(video.viewCount).padStart(8);
-            const viral = formatNumber(viralScore).padStart(6);
+            const rank = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}위`;
 
-            message += `│ ${rank} │ ${views}회      │ ${viral}/h │\n`;
-
-            // 제목 (최대 20자로 축소)
-            const title = video.title.length > 20
-                ? video.title.substring(0, 17) + '...'
-                : video.title;
-            message += `│     │ ${escapeHtml(title)}\n`;
-            message += `│     │ <a href="${video.url}">🔗</a>\n`;
-
-            if (index < displayVideos.length - 1) {
-                message += `├─────┼────────────────────┼──────────┤\n`;
-            }
+            message += `${rank} <b>${escapeHtml(video.title)}</b>\n`;
+            message += `조회수: ${formatNumber(video.viewCount)}회\n`;
+            message += `바이럴: ${formatNumber(viralScore)}/h\n`;
+            message += `<a href="${video.url}">🔗 영상 보기</a>\n\n`;
         });
 
-        message += `└─────┴────────────────────┴──────────┘\n`;
-        message += `📈 총 ${videos.length}개 영상\n\n`;
-
+        message += `📈 총 ${videos.length}개\n\n`;
         totalVideos += videos.length;
     }
 
