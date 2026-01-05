@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "type-check": "tsc --noEmit",
     "icons": "node scripts/generate-icons.js",
-    "collect": "npx tsx scripts/collect-videos.ts"
+    "collect": "npx tsx scripts/collect-videos.ts",
+    "telegram-notify": "npx tsx scripts/send-telegram-notification.ts"
   },
   "dependencies": {
     "react": "^18.3.1",

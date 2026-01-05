@@ -35,6 +35,15 @@ jobs:
         env:
           GITHUB_ACTIONS: true
 
+      - name: Send Telegram notification
+        run: npm run telegram-notify
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          VIRAL_THRESHOLD: 500
+          TOP_VIRAL_COUNT: 10
+        continue-on-error: true
+
       - name: Commit and push changes
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
