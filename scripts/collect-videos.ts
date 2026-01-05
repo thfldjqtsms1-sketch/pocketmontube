@@ -136,7 +136,10 @@ async function fetchVideoDetails(videoId: string): Promise<{ viewCount: number; 
         });
 
         if (!response.ok) {
-            console.warn(`[Collect] Video fetch failed for ${videoId}: ${response.status}`);
+            // 429 (Rate Limit)는 조용히 스킵
+            if (response.status !== 429) {
+                console.warn(`[Collect] Video fetch failed for ${videoId}: ${response.status}`);
+            }
             return null;
         }
 
