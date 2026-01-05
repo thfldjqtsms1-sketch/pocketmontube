@@ -1,4 +1,702 @@
 {
-    "groups": [],
-    "lastExported": null
+  "groups": [
+    {
+      "id": "b9fc252f-4e0f-46d2-b2cf-a4cb3bce2c3a",
+      "name": "유머꾼",
+      "channels": [
+        {
+          "id": "UCLJp0Ixgq2dsYJPWsjmlm6w",
+          "name": "개웃썰",
+          "thumbnail": "https://yt3.googleusercontent.com/sX6mAe3syUnB0tsuG1iYy50YMEiW8dcuK3UjxuGnJ7DctCRniWh4uePdb1VGM-s3GXf6_Kh_Ug=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCAqxH8rMCIfrPJ-7AItYYaA",
+          "name": "노후의지혜",
+          "thumbnail": "https://yt3.googleusercontent.com/QsGTVtMVaf1mSTDswcxU3NNL3AzXgfDopOGScsEeUZPxEflcSxD4kI4HoU6H_Tj7kK_1PFOeJw=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UClVUKZlLdx4ouxx5eN-4QbA",
+          "name": "달빛 아래 인생 이야기",
+          "thumbnail": "https://yt3.googleusercontent.com/XaypjbLfFsXyUf0uh4hIewxY7ro6kiCfGZacZSzTRT3-994uUez7p4g7CsDxHpJPipLqyZe_Vw=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCmFTXZDq7OqTwnFCAGzwclQ",
+          "name": "뒤통수빵",
+          "thumbnail": "https://yt3.googleusercontent.com/TyNchESqpacdKP4rPE-SKxzVDtgttTjTrdLTFb81FG3ZiNOSohgnlZXHenUjQBydTPScpFgOnA=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCNzhEAOUwz27VItISx3VIpw",
+          "name": "리얼유머",
+          "thumbnail": "https://yt3.googleusercontent.com/sLsIw3zmodLQeUt9brJBKeR_7WZSPvbpMf9xOscy1NLvTzLWoi2eUL3Z5N_PQO2be2yWrUvHkxc=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCiS9UiJwfnqwrOUx2Jux6kg",
+          "name": "1분 반전극장",
+          "thumbnail": "https://yt3.googleusercontent.com/2t3x_Xeo5lFFvRNyRYEWBIQZeCnXMhrj1ItJx4l8-v33V90EJTWhFhV9XAYaTaemNyVKWGQ3mg=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCAAZz_fropsDHAl1FPip89A",
+          "name": "멋대로썰",
+          "thumbnail": "https://yt3.googleusercontent.com/1U_rnEWujNSgZVHARuDswiYQ_W2vvJBcxVYJVJzwh5Bbi3cgQNQSm4esph2XUOqz8xX1GbyXpg=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCGCWLJIxhjAT7uN3ghhd2fw",
+          "name": "박억만 회장",
+          "thumbnail": "https://yt3.googleusercontent.com/IT6CCfaJau6ktxjEos5SpUYvAX2Yacx1LxTGVXtY8xGL5ncSPoksRwzDzwPqEGRfZiFtQglHvR0=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCYIXGzcSG8HleOveGWBnvoQ",
+          "name": "박장대소",
+          "thumbnail": "https://yt3.googleusercontent.com/Nf1RYZyuJTjCKac3hSRHjr1VoGn9BlYp7tCqcqOWd08Mvt1XE2ZdhXZtvzsO2vB95bB64VA54Q=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCEQrARoCH3j54bmSjGfUO0g",
+          "name": "불꽃중년",
+          "thumbnail": "https://yt3.googleusercontent.com/aT8FEfmJJ08QDWf15sRFwday0caCAZa_r2BvahEy-z2K38lEr81OfJHcx2xieuvQlh1GYzNg3g=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCR1BmqVWsciWAoJm40t36vg",
+          "name": "빵뎅이아줌마",
+          "thumbnail": "https://yt3.googleusercontent.com/L2Ue4AlCdi1Q15bF14EUt-5XR4VDdledi-9f7I3oKTXT8NMr3YzI0vYYzoud893wdD0ONqI7_V4=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCOTxNewM3vG8t6D6hAwMRWQ",
+          "name": "빵터짐쇼",
+          "thumbnail": "https://yt3.googleusercontent.com/2p1dkNY_yX-CF8q3njXz-0afIX1jQCUHsNswIrN6SukduSfEu56hjvhtCJ_STivNahYJNuCJ=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCNVX2rWgViv9_iGxA2pwaIA",
+          "name": "빵터짐쇼츠",
+          "thumbnail": "https://yt3.googleusercontent.com/9J2rGhl2HzuJ4tWCeCVF7QJ3bcxs9jF_uptsUrF7rXaTLdyIRnJQUxj0hDVbh1Fm5W_qpKBq9sU=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCFjBd-fD7SzRGYe5SHhah1g",
+          "name": "숏스토리",
+          "thumbnail": "https://yt3.googleusercontent.com/kTUPRMrRtOqUeOM7aCXfwunW3MVNcSuOy7AkvMA5c8jj53rhFCbxLB1mwkE47yhgjfTJjwuPrw=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCDtZO3U_3zSKIjoqfx7W8lg",
+          "name": "스마일유머",
+          "thumbnail": "https://yt3.googleusercontent.com/apkMp-hVhSUwqzezMslWeXp983YcB01tBIH_FkmzR3-G5_LxKg71d8KxYtYMzkSOzPKQXnZukpg=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCcIh_fj59pEiwx5R5MQNK-g",
+          "name": "시니어막장극장",
+          "thumbnail": "https://yt3.googleusercontent.com/mdHio4l3TOh-5Jk_sGSuqFFI5OMJFXRNhx262T7VEjkWaF-pFGwQs89G0IIsi9e2qNZXopW_lg=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCPsRI_7Xr-blyi3ORLQUrOA",
+          "name": "시니어사연",
+          "thumbnail": "https://yt3.googleusercontent.com/jWTemLRuu_7IFy-MJ9hD6zp7FdmrgmFFJD6ZAcrebulfeE_lAKd4bYcxp1P8lmkHs-ZbMJ2plw=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UC6Ls6u6fkxb9HByS3vhqTDA",
+          "name": "시니어유머",
+          "thumbnail": "https://yt3.googleusercontent.com/pWAS03dr7qjSK7oO98j6kBIjemL3ClFQNsJAVg_E9lrVCMJWG7VT1M6dUHc8QdTy8ghsjmxR4Q=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCDeKBNFekNnfypjb3AbqZTw",
+          "name": "싸아썰",
+          "thumbnail": "https://yt3.googleusercontent.com/wZo_FP9O3iXRgO5xFpnDQzopNzqORdDSRretrhr_Rdd1UI-9ih_He6RxI5Rgc6Kl_e2JrGepUqs=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCtrNVw0Xu_xRM45_CXqAHvA",
+          "name": "썰딴지",
+          "thumbnail": "https://yt3.googleusercontent.com/2upwAnA9ojAn6a6r1TcbfealKFT40YLCGgj9TdK1zzvs7a40K3PFNySkKsfxupy0Bmis2zhEbDo=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCT-Pjcpg7bt--33Gd81_PWg",
+          "name": "썰렁부장",
+          "thumbnail": "https://yt3.googleusercontent.com/y9Vn7ZZ8QSP04crO7rwyq3OA6T8DzULjNo2JiB-DpK2e_yqdoTZ4BKWR0SXNsUyFnknYn-Rm=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCJ3cS2fXfJ7q82N5kkD7ylg",
+          "name": "썰링포인트",
+          "thumbnail": "https://yt3.googleusercontent.com/VKdR8SloTjhHvPrBf3eT6M9mvWdidVdPeutuMDVQir473TVRgiT7PSglvj1ZXhN6l4Bkw2ffYA=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UC2FfoXAoCFcsjxso58q8o5g",
+          "name": "썰잼터",
+          "thumbnail": "https://yt3.googleusercontent.com/Zi5NrQ6nNR2FVjXJ-ZZtIuIDijpUOLtpMycLNaHczykLNk68Ny_qt6Uk9vnxbCqVTa85zxR04g=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCyo3gGztpBLaLK5LG8Nc1Bg",
+          "name": "썰잼튜브",
+          "thumbnail": "https://yt3.googleusercontent.com/j3R_hlu9TXY7m8ebCLazyy3jUfE8dCkpPN3VGIKjKlBrUE9N4T92W1k1Uib80G4ad0bUKcwutw=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCavJxgosLZRKB5yV-PkPK1g",
+          "name": "썰튜브",
+          "thumbnail": "https://yt3.googleusercontent.com/-rytq_EvV-Thta6hoHftH4VGP8_P9kI-RQHbEHJLtUhXz-eqEvv-7gqS6yCCU77N30KJ_NKDxQ=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCXiRqRVMRWHy__OvG9Pl1ZA",
+          "name": "야담과개그",
+          "thumbnail": "https://yt3.googleusercontent.com/Zj6LGRgJMLxrkz0DFdW4Jwc1wbjwcnaqPfyilfpsZnPfdS4Mn_gNm6xHssFJS2DUDGIME7edNCQ=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCbazRfH5IGKPMWzjMwA_Gyg",
+          "name": "얏썰",
+          "thumbnail": "https://yt3.googleusercontent.com/5WoD58-DCS6Gw0uwrK2yz0nFYaLhIUNb-fXQIh23hyuwTphFmNMFiIBUYf9mGQp40woFIlgm=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCUiKQwo_BaEIZ9mURzboTtg",
+          "name": "우후훗 유머",
+          "thumbnail": "https://yt3.googleusercontent.com/b_x11yY9Tnz7FUEc7CIamrGLS6iqX2Zvw9qNVQHfznuzaVC_3_QwO67fb3fdIxadACL5c26B6A=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCq7qfuCkhMbm4lQcjFdc9Vw",
+          "name": "웃는게일이야",
+          "thumbnail": "https://yt3.googleusercontent.com/6ykjhhaUGJD5fndpsLXIlAeskN-z8ZucEFHnkbtBG6YqFMS46Q-f8SNEITqvIu0x3ddr77volP8=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCCNPkAP6-Yts1aU0IT_FMoQ",
+          "name": "웃썰튜브",
+          "thumbnail": "https://yt3.googleusercontent.com/KFmv2CmJ1jousOVFl03zfO1sKJb0UwjD5wYItOT7LQM0z1YGS-MMXlOyHr3CvkJ9D-3wCV8J=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCnDHfxy_4YkwyLCh-Z21cyg",
+          "name": "웃음빵",
+          "thumbnail": "https://yt3.googleusercontent.com/dUJrUsF80clJ4c7ivdb-omv6xxrGvUZNPbhi9Qo6_dUmMlFYfvqSJrri1X5xtvmpTMq36DJyZg=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCRGp3rMi8KPokrSSijH43_A",
+          "name": "설레는중년",
+          "thumbnail": "https://yt3.googleusercontent.com/DmWXPcZshYIObQVA_ZYHJV8XFy2t-jhGezEEpO3_s5vytQ43SM8rJDz1B9AQrSbDYwppBN6N=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UC0zFxOxGZMZW8xN2S9BBXNw",
+          "name": "웃음하이",
+          "thumbnail": "https://yt3.googleusercontent.com/F9jK9SHiYQoj0nTr_7ME-9Kezu2CQROt_gP6i61zd0wk0otxqQ34wXDNjFQOn7Bf6C5MHZN_=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCc1bmNDZA5GZ17f8-FNIf2A",
+          "name": "웃짤튜브",
+          "thumbnail": "https://yt3.googleusercontent.com/1hdIi9wz3ncisOPitBRBPXyjKJPJfOW3CYWjVVxhhUx-sBcQNTdOEShc1vGZ0yMz2rykcNZhtjE=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UC8YeZ0BG5Fg4XX9aXofzl6Q",
+          "name": "유머 방앗간",
+          "thumbnail": "https://yt3.googleusercontent.com/3G4aJU7HdghsBe-6XAjbbsTMT-lI78RcN7ubfzMlzlTXvsYJWfTqMIMUhx3pemzTVHNo6AcMZA=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCVFVuApF9-_WBhgmd8vcolA",
+          "name": "유머2번지",
+          "thumbnail": "https://yt3.googleusercontent.com/uDXSDjdAQlx_A4yG8OWULT34KDGoEdZH2TpspzgPPlnCufktvX31cBtr0Dk66tC7MkvVBMVJ6w=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCGNqjCSLV7XoyMZjUtiIm0g",
+          "name": "유머만세",
+          "thumbnail": "https://yt3.googleusercontent.com/sNnVRd1YMa77_HbpKOr9p9iosbdDcZrjQjaDtB5U6uCPTrx-H4DpWfoZKkrULbt98lOfhnv9Ag=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UC22O_VgNHVlgIEB1BbOBcZQ",
+          "name": "유머실록",
+          "thumbnail": "https://yt3.googleusercontent.com/2qNrxamK3HR619HrzqZKR6e8eTeMGOKJwzY9Ld5C8IKxypwAibGOyzCoA6wYdc7-vHtx-mNO6w=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCmjTGqO6lhbXqIGl496hFvA",
+          "name": "유머연구소장",
+          "thumbnail": "https://yt3.googleusercontent.com/XKpmOD2zAdbNtK3YoI3zm9Qemk7GzpFggvFC-Wl-eULzXVWzk56p1mWmaS4DjqVGwhp8x9MQBw=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UC3CGT1zkfTmD1gZaXg_vGnA",
+          "name": "유머카페",
+          "thumbnail": "https://yt3.googleusercontent.com/oK6G1LxyTZgCpwEnQzVX8MLDEOsy0gXWOL5WwqcjUQtLNFcSv6EEJ-49GVr3WYG6a6PH2uT8MQ=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCupUm66TCYOS8iyCgQ0hVgw",
+          "name": "인생롤러코스터",
+          "thumbnail": "https://yt3.googleusercontent.com/HZzxlaYmuaTa_0RfVUX_S1jNGk9FhMh4tSii2xkCQzn0ipX1SkYzc-k73J4tD01bB4Mjs09g4A=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCZ2ftau7lrlwy_wGayJ5cpQ",
+          "name": "인생은 한 편의 드라마",
+          "thumbnail": "https://yt3.googleusercontent.com/JVU5QrwHaZGNP25qQjEBwGOns30-qMcd9VI4uUzbNHfTZ6XtSBYQc3yQwIQpMkGNJle820WXfQ=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCV6jv6FctIFmW_9o9DmFkrw",
+          "name": "코믹킹",
+          "thumbnail": "https://yt3.googleusercontent.com/LZCkL18EkpCSOt7JQXPrkGyJFEl4fwd76DGhaWSICwaeskD6Tl_4_-kMOkTFmCLASTQDgbK3=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCerKOqEFk4zcRRGh4GjY_lQ",
+          "name": "AI웃긴유머",
+          "thumbnail": "https://yt3.googleusercontent.com/RoBIJB0zrav4PHuZz69r8BeEAhamPkJBOehwwYfBlOeiOolGK1cR3msTL6cDV2dv3DbTEYenLts=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCAvmqCIK5nLmbo6nM_AePVA",
+          "name": "ミドルナイト",
+          "thumbnail": "https://yt3.googleusercontent.com/61NVcPTckTuoizZAmo1vzASFqs9alYB7gqTFydhZYqy2GDhmc1lFRQsaR9lPe2lvsd672lA=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "@%EC%82%AC%EC%97%B0%EC%9D%98%EC%96%B8%EB%8D%95-p7d",
+          "name": "사연의언덕",
+          "thumbnail": "https://yt3.googleusercontent.com/eqc1e7O5LlbgCvSKK8HknyVDk7vY0q27Qyz_FHYLf07cRe8KgCu9HfRbpxgGkiOTIMW1MDrk=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "@%EB%B6%88%EA%BD%83%EA%B0%80%EC%A7%80",
+          "name": "불꽃가지",
+          "thumbnail": "https://yt3.googleusercontent.com/qtZD2wpkbKIXsKE-mteEmlCu4kxm94ERo2I1-uDyP0eKd3eFV_lBJoMOAW5VxfacP_PYMPLPON0=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "@Happytimeeeet",
+          "name": "Happytime",
+          "thumbnail": "https://yt3.googleusercontent.com/230ujPIZhWjaHSODdzFb6aBt771I1C25kDO2MYGZD5fo8lScnWPpBOcUPmYeifvpvw0EfmRY=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCdTHVRZ4FkOsRIE9SnlBlyQ",
+          "name": "미시의힘",
+          "thumbnail": "https://yt3.googleusercontent.com/pgCrMG7n1ZaIHEl_Uwc9D0qP8Wa3tga9k_3BnAwhUWBNlN0YC6Ne3Cw0NRBIr7PG40lTJyeL=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "@liferecord-m5k",
+          "name": "노후웃음",
+          "thumbnail": "https://yt3.googleusercontent.com/1Plv9WjgCUXdjlMspbo_OERyEWxlAt8vOXyCFmE3IW4KIbJvYkXv9nNz9KVMiVNaQQxdyb66WK4=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCzTEMsJNJgHeRR_PURoz5qw",
+          "name": "비밀퀴즈",
+          "thumbnail": "https://yt3.googleusercontent.com/aitjA-7cgMBD_LmlQVHXHFE_rrdoj6SjoP733p4wStNwzWlbnY1o6VJj9fATxlWN66BauF7lFaA=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCZds8iMzyeI3VMG-VdIytaA",
+          "name": "뇌빼고",
+          "thumbnail": "https://yt3.googleusercontent.com/Nh0DL-cL5xH6VXO9YRXi7-UK9jLVRTufevH-gTwxYTnqH6Kd5S1wLNfInbJN-G1J2-PgND1g=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCfO7yHtIknuG_27d6bvZLnw",
+          "name": "코믹별밤",
+          "thumbnail": "https://yt3.googleusercontent.com/Fy0qetQHLCDk2DL1zFtE1ZCiEdDhJ9B3zBz3ZJ0rMnVVjx9VfiLJjSFT47yDc7ZxOor_9L4NsA=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCFDMn_nZazolzlT0Uiuxbtw",
+          "name": "마음의 행복",
+          "thumbnail": "https://yt3.googleusercontent.com/30WFofXtbk4Um6KA5oOwjmFCttSvc3qpJU7BoFtr-DNUnZgVg2Pr2Lq517nBfmPfaA_wFjw5=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "@%EC%9B%83%EC%9D%8C1%EC%8A%A4%ED%91%BC",
+          "name": "웃음한스푼",
+          "thumbnail": "https://yt3.googleusercontent.com/adT02kTSe7vK7kD5DXWPk5uY97d7zZNzE3rA39tiUiLQqSVXvDve03ktZCsptI-Agubcmrjg=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCu-uqyQlYR0ypEfEuO3BXXA",
+          "name": "꿀밤토크",
+          "thumbnail": "https://yt3.googleusercontent.com/XHukA6oCu7zhSkC6yUl64PxnMS9icQ-qgPN0O0aJv7M6qoxYlCDct1tE21IprxLhsY5lFHMQIg=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UC1beepriksKU_GyGftl7qJQ",
+          "name": "깔깔이야기꾼",
+          "thumbnail": "https://yt3.googleusercontent.com/fAQPN6wRkoISz7Q-gqRWErhrMfMXSxiJHVovFgQe5maVZL6O6dmEyMICtd3nvyOwuHFNQK7Khg=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UChNGrFo1CxokCQpMQ6D_ovA",
+          "name": "웃음한스푼",
+          "thumbnail": "https://yt3.googleusercontent.com/adT02kTSe7vK7kD5DXWPk5uY97d7zZNzE3rA39tiUiLQqSVXvDve03ktZCsptI-Agubcmrjg=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "@%EC%9B%83%EC%9C%BC%EB%A9%B4-%ED%81%B0%EB%B3%B5%EC%9D%B4%EC%99%80%EC%9A%94",
+          "name": "웃어요",
+          "thumbnail": "https://yt3.googleusercontent.com/2WTQhZfYLOb3NdfviAQ0P6dZxFxaHVo-YueXH2kVglDyTM6DgZ_jqfJDJR-IvIdpy6RyDtDAvlg=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "handle": "@빠르고알뜰한",
+          "id": "@%EB%85%B8%EC%9D%84%EB%B9%9B%EA%B0%90%EB%8F%99",
+          "name": "노을빛감동",
+          "thumbnail": "https://yt3.googleusercontent.com/341qwVOtMuEWn0WENrbm2JiQMZwy-NVDhPrWB9OO6O7xboj25jlbSQWznr1MtqbqCkoxjg7K=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "handle": "@빠르고알뜰한",
+          "id": "@%EB%93%9C%EB%94%94%EC%96%B4%EC%A4%91%EB%85%84TV",
+          "name": "드디어중년",
+          "thumbnail": "https://yt3.googleusercontent.com/CMEKAwG7MlXtzHTBZyeCaE8qiGKde6e28Rod8n5GZqOYx8cLCdz1AG8piTr2i-icZrGxxO58=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "@%EC%9B%83%EC%9D%8C_%EB%B9%B5",
+          "name": "웃음빵",
+          "thumbnail": "https://yt3.googleusercontent.com/dUJrUsF80clJ4c7ivdb-omv6xxrGvUZNPbhi9Qo6_dUmMlFYfvqSJrri1X5xtvmpTMq36DJyZg=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "@%EC%8D%B0%EC%9E%BC%ED%84%B0",
+          "name": "썰잼터",
+          "thumbnail": "https://yt3.googleusercontent.com/Zi5NrQ6nNR2FVjXJ-ZZtIuIDijpUOLtpMycLNaHczykLNk68Ny_qt6Uk9vnxbCqVTa85zxR04g=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "@%EC%84%A4%EB%A0%88%EB%8A%94%EC%A4%91%EB%85%84-romans",
+          "name": "설레는중년",
+          "thumbnail": "https://yt3.googleusercontent.com/DmWXPcZshYIObQVA_ZYHJV8XFy2t-jhGezEEpO3_s5vytQ43SM8rJDz1B9AQrSbDYwppBN6N=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "@%EC%9B%83%EC%A7%A4%ED%8A%9C%EB%B8%8C",
+          "name": "웃짤튜브",
+          "thumbnail": "https://yt3.googleusercontent.com/1hdIi9wz3ncisOPitBRBPXyjKJPJfOW3CYWjVVxhhUx-sBcQNTdOEShc1vGZ0yMz2rykcNZhtjE=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "@%EB%92%A4%ED%86%B5%EC%88%98%EB%B9%B5",
+          "name": "뒤통수빵",
+          "thumbnail": "https://yt3.googleusercontent.com/TyNchESqpacdKP4rPE-SKxzVDtgttTjTrdLTFb81FG3ZiNOSohgnlZXHenUjQBydTPScpFgOnA=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "@%EB%B9%B5%ED%84%B0%EC%A7%90%EC%87%BC",
+          "name": "빵터짐쇼",
+          "thumbnail": "https://yt3.googleusercontent.com/2p1dkNY_yX-CF8q3njXz-0afIX1jQCUHsNswIrN6SukduSfEu56hjvhtCJ_STivNahYJNuCJ=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "handle": "@빠르고알뜰한",
+          "id": "@%EC%A4%91%EB%85%84%EA%B8%80%EB%9F%AC%EB%B8%8C",
+          "name": "중년글러브",
+          "thumbnail": "https://yt3.googleusercontent.com/qIX5p2irwhPEg1o4_PjCUZNQjAM5MkTR7pe_iH233Fa-a8oq1aQOY9_jC9RrkbPr2YChTMMb=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "@%EC%9D%B8%EC%83%9D%EB%AD%90%EC%9E%88%EB%82%98%EC%A7%9C%EC%83%A4",
+          "name": "인생뭐있나짜샤",
+          "thumbnail": "https://yt3.googleusercontent.com/JNBRoGSYrEMDUAQDuXFJ-v2psfcQML6qJsV8HRMnzvjS3kltsJwgV0tJjYzp41Kb-B2Q4oCFqQ=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "@%EB%8F%84%EB%9E%80%EB%8F%84%EB%9E%80-%EC%9D%B4%EC%95%BC%EA%B8%B0",
+          "name": "도란도란이야기",
+          "thumbnail": "https://yt3.googleusercontent.com/-wmWz-3vzxDLJPUteowoLPBZbym0OUO8ll-OIkJl9SoZp41rk2BkPqYfE9Z2PDS-tK5MlpwkfuA=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "@%EB%85%B8%EB%85%84%EC%97%B0%EC%95%A0%ED%8E%B8%EC%A7%80",
+          "name": "노년 연애편지",
+          "thumbnail": "https://yt3.googleusercontent.com/PdjdUSY15N32kkBPocGILHi1o986YIQocCHEjXJ7iJbt9NGF9sABQpookObJPzIveUlhpv2rHQ=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "@AnimalRescueStationTV",
+          "name": "Animal Rescue Station",
+          "thumbnail": "https://yt3.googleusercontent.com/_wA2MvU6m3xcFquOZNqJvhbRE8TxkMTjyw3PxHgFO4Ynp_LIcoxcIDvgPbdIkQwrLB3Uq7sdEFU=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "@%EC%8A%A4%EB%A7%88%EC%9D%BC%EC%9C%A0%EB%A8%B8",
+          "name": "스마일유머",
+          "thumbnail": "https://yt3.googleusercontent.com/apkMp-hVhSUwqzezMslWeXp983YcB01tBIH_FkmzR3-G5_LxKg71d8KxYtYMzkSOzPKQXnZukpg=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "@%EC%82%AC%EC%9D%B4%EB%8B%A4%ED%95%A0%EB%A7%A4TV",
+          "name": "사이다 할매TV",
+          "thumbnail": "https://yt3.googleusercontent.com/x63m1o0dKxc23jM4V4ovwSG-ZA3KG2u8Is59VUWZidzAtHkh6NKaoySFfFWtb5E3OeX3V6_c-GU=s160-c-k-c0x00ffffff-no-rj"
+        }
+      ]
+    },
+    {
+      "id": "66cc545a-8195-483a-8295-f81a022b3a72",
+      "name": "리얼동물감동",
+      "channels": [
+        {
+          "id": "UCrNxXRRBPpQ6ujrHiRrkb2Q",
+          "name": "愛をさまよわせないでください",
+          "thumbnail": "https://yt3.googleusercontent.com/SmZJRuyQHrtA-9u0DTHHxgsXjB5AigWLqZ3xdB3JjFhy69cwVIBgLZWJHOcvwifr67fJiOhh=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCAFQzRFac-DanHbT8wd73AQ",
+          "name": "AI DIGI CHAOS",
+          "thumbnail": "https://yt3.googleusercontent.com/dXwaSZ_WbewUX0f_sIs5_3kZeirGNFKzI905b2bKFyKYJZWwgw0y6YeMkN2MY8Cgi8y5vJaVrg=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UChbjtA9kARatnEoQjQ_AzeQ",
+          "name": "Dear Paws",
+          "thumbnail": "https://yt3.googleusercontent.com/rbkT2kU9xz1c2zKB9Wwk26GJlQsLzIodLzZrMR8V4IDDC5gLZfHfPYmsQzejwondbKzrtKJnArE=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCwpIWJT9oNzuknb52SqjNxQ",
+          "name": "Doctor God",
+          "thumbnail": "https://yt3.googleusercontent.com/NLX47hG4AUbLdtOH3xqreRZnju4jwEFQFoVRkMPkALiH14aHDStk_aWbYd65qfrRJJp2QcTklyw=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCJIWbAFoJecSgitotKwJ_WA",
+          "name": "Fluffy",
+          "thumbnail": "https://yt3.googleusercontent.com/JURK3Q3N2tESauWjpmPYr-g4FEN8e0yqViqyyM0wxvNr5YVVV_GX_09-3N9Ks-Gx3_QWuR38pA=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UC3X8aXMYEtqKENEjI-WY2tA",
+          "name": "FurHaven",
+          "thumbnail": "https://yt3.googleusercontent.com/LMkfJnSzsz4OkL9z_wTuNuH5JIQtNjKdEXWPbppSxl8O3Bk96WtlDWCV1Ni66a2IwOjjHCGCdEM=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCi6UmCot4qq5l3gcp3ljCRw",
+          "name": "The Super Dog",
+          "thumbnail": "https://yt3.googleusercontent.com/CwCFeUlyJGOzgYR1QxIZ6kDHJ1hBaGbDT_xZonsDzCo6G-yLDV4V9890vJRCEKSTwABBtHPXmg=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCg-G5-WwYkxkx5ZWirdhmfQ",
+          "name": "펫타버스TV",
+          "thumbnail": "https://yt3.googleusercontent.com/-1w5ERBtsnw-DH1CV4zfSZl_AncreXB2zJkCvabSYtef31kCzKtZY29HjtbiAbWZ0Vv8cEvbZAY=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "@FunAnimals-p1z",
+          "name": "FunAnimals",
+          "thumbnail": "https://yt3.googleusercontent.com/BdefQDcDsIY6KfOLp6ZvH9DnY2J6zPTXUlGgRZBZZdG4fA33WyZIazGOLUGwoEHRm_y7Aumn=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCBs61-Snna_-OxhJ1CGqPVA",
+          "name": "Captain Juju",
+          "thumbnail": "https://yt3.googleusercontent.com/Ov9oPdyPyKelAqad06Rcv7wHtyiJovxPYH8Mea14zyuCBKD-f3UCGVMKMXWLDpifGTQz_UEkOZQ=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "@LoveGuineapig-k1j",
+          "name": "Love cat&Guinea pig",
+          "thumbnail": "https://yt3.googleusercontent.com/eFTyLKHH8MZSGfgrZGk9dtuMUMwk-1-g0oJMjh5gm1HlhHOFQOX4PpDiyyAfwsxqjtAuhHJJrg=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCHvPHVY-dmWLQY6O1VH2yVQ",
+          "name": "PawStory",
+          "thumbnail": "https://yt3.googleusercontent.com/kAMGo7YOGNXjnS80-ESf4PXSVE-jJutpZz44rOuaomM8QcN_yHOZ7jX78Ry3FbmnRIe882wNtCI=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UC25VG8g3qn8M_cGSkQc3DOw",
+          "name": "Polly-Mythical",
+          "thumbnail": "https://yt3.googleusercontent.com/QaZMXR8Tk8jb_okITGt86BwbmV4BZu33Uvl4AC4o2etKTs2R1dZ7JdR2VyKQeqaoB1lHVCi2cg=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "@RightHereStories",
+          "name": "Right Here",
+          "thumbnail": "https://yt3.googleusercontent.com/OXsHrM5FOFDpjUKerbHJv9g7b80FzgqpvJ99YsMHz2msHgrImM9xY8OOnm_UfMg2bt5DbQUK=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "@%EB%8F%99%EB%AC%BC%EC%9D%84%EB%8F%95%EB%8A%94%ED%97%AC%ED%94%84%EB%A6%AC%EC%8A%A4TV",
+          "name": "동물을 돕는 헬프리스 TV",
+          "thumbnail": "https://yt3.googleusercontent.com/6ipqEKgPmT_w4scA30gl0UkoK45zrEMX6q4Wh2tIGOAZQE8mwgyzTRDbrDqn_b0ClRyMfRf1Z5w=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "@pawsrescue01",
+          "name": "Silent Paws Rescue",
+          "thumbnail": "https://yt3.googleusercontent.com/zT0eFhVLmUb88YnszPA1pima6lKqljOsEcXCthGQW3_uv_PRfHpR33pfu9SzBYo_eJXSR2ZYLHA=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "@CallumHealing",
+          "name": "Callum Healing",
+          "thumbnail": "https://yt3.googleusercontent.com/zE8c98hDELL0D3dGdSpEcfu4UsNvInyZALhlY5kUsRtzys_DvPJLJ8wEecmNCrsYf4uBObO7KNc=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "@DogDreamsTV46",
+          "name": "Doggy Dreams TV",
+          "thumbnail": "https://yt3.googleusercontent.com/qDFDN4z22G_Q-bMRDWNyFHf7yCrL4ae3F_3Crf9xhpVwHrcrBnKtE6HP0G_34GMQSM7zXzb--w=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "@haizhenlu888",
+          "name": "愛をさまよわせないでください",
+          "thumbnail": "https://yt3.googleusercontent.com/SmZJRuyQHrtA-9u0DTHHxgsXjB5AigWLqZ3xdB3JjFhy69cwVIBgLZWJHOcvwifr67fJiOhh=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "@heropawsstudio-e2b",
+          "name": "HeroPaws Studio",
+          "thumbnail": "https://yt3.googleusercontent.com/lPz38-7ShvZH10ueIwVX-nU6vxrfT6fUGNFFPr4-fL_H46-_895ElIUG_Psf2cxh90XVK74Q464=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "@bravepawsovo",
+          "name": "Brave Paws",
+          "thumbnail": "https://yt3.googleusercontent.com/7FiTmBlF-YI2cD0IBnK9Lty5TsTxBZk9hkC_nGfYvhh8VukI9BvXfoz9G7iuoG3OrZPpqozNHQ=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "@rescuemissionht",
+          "name": "Rescue Mission HT",
+          "thumbnail": "https://yt3.googleusercontent.com/phGnqezXuX31W6uG2Dxg7_S82vXQQi_AZATu0YGM_AhESzkWYryTNM4-n_74y1WS18nIDY9BDQ=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "@AnimalRescueStationTV",
+          "name": "Animal Rescue Station",
+          "thumbnail": "https://yt3.googleusercontent.com/_wA2MvU6m3xcFquOZNqJvhbRE8TxkMTjyw3PxHgFO4Ynp_LIcoxcIDvgPbdIkQwrLB3Uq7sdEFU=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "@furoria",
+          "name": "Furoria",
+          "thumbnail": "https://yt3.googleusercontent.com/3XzbWhLdM0Lezu4ZK5RUtdoXN4VSRmczVcmHLBC4EEcjCndfVs_rS5B9U1deQb291LgU_7XOjQ=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "@bravepaws_studio",
+          "name": "BravePaws Studio",
+          "thumbnail": "https://yt3.googleusercontent.com/qZnbilR7pSWH_iyFha9Mq3for-Xfjw_l3wbbX0kXGwu5K9-4BbQKd0833KQyiNYROJ5Xaz7QYA=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "@WildlifeMissions",
+          "name": "Wildlife Missions",
+          "thumbnail": "https://yt3.googleusercontent.com/fQZPIg4qnciC6ocmqMC6gyQXJL4HeRiCtlPh83BJXZdxAZs21COVZf9ACcQJNiVgoW0Pvv1jIA=s160-c-k-c0x00ffffff-no-rj"
+        }
+      ]
+    },
+    {
+      "id": "1cfe910a-d30d-40e0-b7c7-8e433eee136c",
+      "name": "고양이드라마",
+      "channels": [
+        {
+          "id": "UCe3rGX14dqTb843Rp1w3VKA",
+          "name": "MeowlyWood.z",
+          "thumbnail": "https://yt3.googleusercontent.com/45wbkzF2ODkWpS-lYICyfz8aOuet3nyWzXZ-UHwL10QyCbvlD0-VOb7cC5gvjx0o4SvbkKqEdn8=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCnzis3s11_p5Etrg_qamPFw",
+          "name": "Ai Meow cute",
+          "thumbnail": "https://yt3.googleusercontent.com/_O8G70lNqYpRrhUmwmRkqD5hplmKUGfGecEHLOiRt9L_PgNvgJU4ZfUegvr1dCuInN0IEexLQQ=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCIEitdyXBdbGWihTMkXCqaA",
+          "name": "Border Collie Tales",
+          "thumbnail": "https://yt3.googleusercontent.com/puD1pd_Q8P_PhOHzsQM13NHbTn9x3R_-Ae9KXKOqJ9FDMPSm18-mpyVR26FG7f-o3VwUIukE=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCiNW2hXEgiDFnMt92OsWn-Q",
+          "name": "Briant",
+          "thumbnail": "https://yt3.googleusercontent.com/PGAHdvVatcif_5jURBoA2aDWcg6S6l-64qLcknyJfkOcVQ9tyujojCwGUnrg2o8Wq0q4zWQNKg=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCI1Kusx0teS0vHYd9wPDRyA",
+          "name": "Effect journey",
+          "thumbnail": "https://yt3.googleusercontent.com/pM3PbnVnqqvt2zD7JsWSis4IyQxKFQDCnq8dFqNv0e3QboHDEo8A1iW063yJQLGytuR7AAgH2XU=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCVX--3lyc0S7aPLXbOn0L6A",
+          "name": "GenZ Stories",
+          "thumbnail": "https://yt3.googleusercontent.com/Gapc64e6IAEDaIXGBa89DefZe7OpbVSRxJbRD__kaZ5pHii1nLPZ7dwxdXcKoh9HlpMzG5MoHSY=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCc74Ozpgu9jUd1FHpMp7VsQ",
+          "name": "K5 CatMeow",
+          "thumbnail": "https://yt3.googleusercontent.com/UOo_e-kImUpHDfTYZ11FaFe7mRSUsBUfDqwaZzVlWABwpDzNVHnnW0q7envRZSIaWexS_jIRdw=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCuKCXDQRnQrWFOini-24Yrg",
+          "name": "Laugh2cry",
+          "thumbnail": "https://yt3.googleusercontent.com/5cyi06cLORIjFASlV82VelF5V3Kb_5KIVsNKHLngFZKqGkbGa32Jv_Wxpzn9vhC29HexE8PcyQ=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCYyrG0ZR0X0ZWM_wYLAqKLw",
+          "name": "Meow Meow Stories",
+          "thumbnail": "https://yt3.googleusercontent.com/dUjJHWdPFi7X1hO4aB6eC-wgIr_dgAvqiD6cH9ZccN10y01shpZpFuJqVTEM50J5YtOHu-3N7A=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCmzKMciNVGZlCfWlio_gROw",
+          "name": "Tiny Family",
+          "thumbnail": "https://yt3.googleusercontent.com/feNYV2mKTdXs9c5Ph0YRxvHonXLWF0Zkd_-OUTJYyp5qty5V2WrJLAtoWIz2_eqkf3EQI8Ix=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "@BossNekoCooking",
+          "name": "ボス猫おとこめし",
+          "thumbnail": "https://yt3.googleusercontent.com/gu8ydX0lFZSycRgljkBw6XmA7bordTK81jNWgisXZ83Rd2nhiVJn6z8otPkJcVaQ2EdTbPmFBzY=s160-c-k-c0x00ffffff-no-rj"
+        }
+      ]
+    },
+    {
+      "id": "126e26f5-3719-4efc-8a0f-fbc52dd43bd5",
+      "name": "바이럴",
+      "channels": [
+        {
+          "id": "@BandarApnaDost",
+          "name": "Bandar Apna Dost",
+          "thumbnail": "https://yt3.googleusercontent.com/hz33iY9yzgrYvWoLKO--7Zg5xxH5jJQiKehDjHwdKV_c8a0zq_9xI4XANb3t88VZDphtH8OJocY=s160-c-k-c0x00ffffff-no-rj"
+        }
+      ]
+    },
+    {
+      "id": "f441a49f-07c3-4d2c-b719-c8728d7dd8e7",
+      "name": "트로트",
+      "channels": [
+        {
+          "id": "@%ED%8A%B8%EB%A1%9C%ED%8A%B8%EC%83%88%EC%8B%9C%EB%8C%80",
+          "name": "트로트시대",
+          "thumbnail": "https://yt3.googleusercontent.com/h3PBGNB-iSFB3Af5lHOks0xLQ8ixLwAyhPZshV79gS-VyjqcPb35zHM8qhfisU-M-HscWesdWA=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UC3NxvX3ZvkCvNyRQXjgxNfg",
+          "name": "그녀의 감성트롯",
+          "thumbnail": "https://yt3.googleusercontent.com/ND3Y9g7sgzv65CPsicKYq8sB74IHB3rC1tkJNd6lGNMw4vKaff505SrGJrY81ZuTOTThm7RH=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCcW5kCMBHEEvZxRZsN0ynpQ",
+          "name": "낭만 레코드",
+          "thumbnail": "https://yt3.googleusercontent.com/bUmV07ymmEihYinHF0_i5RvGxSoDCPyeXu9kXs8qkOFmX4j07wV2n4MS2G84obog43MJlmWu=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UChW9UizMF4Uz1e1Z785EoCw",
+          "name": "소리곳간",
+          "thumbnail": "https://yt3.googleusercontent.com/keIVr9eHyYYIBcW8L533wio8wf-esYKLwgbxFGGVgnODhlfUWcBxb2cvjbjf3f5dHTeouEFfARQ=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCHR5MsP77tIxdz6TpHM0aOw",
+          "name": "언제나 트로트",
+          "thumbnail": "https://yt3.googleusercontent.com/besoClVl1sfjKuURZS-Hjm0B2ZCHFoCduWWkDZCMB-FGrAaUGOTe7J3PouSg48vWHDWDxQ_2gRk=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCTaREGvrqzCNqdu-aROwOaw",
+          "name": "트로트 여왕",
+          "thumbnail": "https://yt3.googleusercontent.com/snlgbpiAWI4U4b4-X8jw-GLR6HbpbCpmSi6coZpvfiboapk5x6l7RhXRxvX5Hglzdj-brbrMTmc=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCvaulfM2LJq_VlDuwahajRQ",
+          "name": "트로트그녀 /演歌彼女",
+          "thumbnail": "https://yt3.googleusercontent.com/Fexujw3nzayeZSEs601rDNCxOgbcaTthiC163ElVWJWHss2pfjE03SBcePIJAigUiyOEMiNW=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCQykgz-aVL2-zi5V5mCK6Wg",
+          "name": "행복트롯",
+          "thumbnail": "https://yt3.googleusercontent.com/vA_FnEAbLBAhls0kdoAiT21Jsy7DxexY-hpQJKpdRk8zEoLwsvEkBns7Zid8lAnOXF8mk4U=s160-c-k-c0x00ffffff-no-rj"
+        }
+      ]
+    },
+    {
+      "id": "fe6a7410-ebbf-4dc3-ac6d-a3354a52b628",
+      "name": "사연",
+      "channels": [
+        {
+          "id": "UCrtZDHeWyWmc_PXYh_bPQog",
+          "name": "감사월드",
+          "thumbnail": "https://yt3.googleusercontent.com/sso5Azhbhde6uOZe9Y4SeB_nOWL6-rAf_wQ_RA-laK4JKj9dQNdDIGqH5IptmwKk4tC0MJiwSg=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCs8lvxZTd70KDrJzb3a19Fw",
+          "name": "노년 연애편지",
+          "thumbnail": "https://yt3.googleusercontent.com/PdjdUSY15N32kkBPocGILHi1o986YIQocCHEjXJ7iJbt9NGF9sABQpookObJPzIveUlhpv2rHQ=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCRmg4uCHVUs3NeNFc1erxYQ",
+          "name": "사연사색",
+          "thumbnail": "https://yt3.googleusercontent.com/cUrE_eRgpEbpHHLmNjDIvjsGDWGf9wDxFDI1_zhoDnqbS61h76gO0DFE8HcLgN6B2Cev6v8-fA=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UC4B54b5KMEnbhmwqj5x9Rgg",
+          "name": "사연의언덕",
+          "thumbnail": "https://yt3.googleusercontent.com/eqc1e7O5LlbgCvSKK8HknyVDk7vY0q27Qyz_FHYLf07cRe8KgCu9HfRbpxgGkiOTIMW1MDrk=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "@%EC%9C%A0%EB%A8%B8%ED%9A%8C%EC%9E%A5",
+          "name": "유머회장",
+          "thumbnail": "https://yt3.googleusercontent.com/Upv2O5dKGhpSnEkwstcqpgWnnNZ8k5hb6BlNeJJV0LyQSUrwEigwDI5ANjouN8GnztXHq8dOsg=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "UCbjkBxUJpvThrZU9QMbUOvQ",
+          "name": "시니어 오아시스",
+          "thumbnail": "https://yt3.googleusercontent.com/Dbn1O2CVGqERhINZBq0w_QAnIVWO9Ie0QC3VZ6gOQDtq2D0wJfAYrkWbHblpevLDU0KuMBtF=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "handle": "@빠르고알뜰한",
+          "id": "@%EC%86%8C%EB%A6%AC%EB%A1%9C%EC%9D%BD%EB%8A%94%EC%84%B8%EC%83%81",
+          "name": "소리로 읽는 세상",
+          "thumbnail": "https://yt3.googleusercontent.com/aMv-y9dQyoDeUkngXr0EMybmAzmES_v0CVEkgbljQCUQZ69a1gwRn0QaZvZQedW1Jt48W6UmBg=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "handle": "@빠르고알뜰한",
+          "id": "@%EC%82%AC%EC%97%B0%EB%93%9C%EB%A6%BC-b4c",
+          "name": "사연드림",
+          "thumbnail": "https://yt3.googleusercontent.com/P6WOkIE2twPwVnT08vgQyupNrDkljWiyG8aYI85mOv8-Z4oVyoQ6OqJskRZZdLWtj_VwEbVmsd4=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "handle": "@빠르고알뜰한",
+          "id": "@%EC%82%AC%EC%97%B0%EC%97%AC%EC%82%AC",
+          "name": "사연여사",
+          "thumbnail": "https://yt3.googleusercontent.com/B3RjHKo_mD4sGpnbY0JEVMXeE_3XGQ_SN5EH0ovgS7n3HONkwNl8xAMUK5yzljJtlikMov8GyA=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "@%EB%8B%A8%ED%92%8D%ED%95%A0%EB%A8%B8%EB%8B%88",
+          "name": "단풍할머니 이야기보따리",
+          "thumbnail": "https://yt3.googleusercontent.com/ZAxrOWre4s9c2NR2uxTlcO0znZK4NV3Od0vM51RsiZtRCm6iS8nPLGwcaVmJNwZDWiAb3IVc=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "@ssulTV",
+          "name": "썰티비",
+          "thumbnail": "https://yt3.googleusercontent.com/QXl8d8xojfyik4P7dnzmyGGznAdVXz9aUxy1_bmiLeCGH7Ya2vqJnT23g2puwtOmDFzXTjBB4Q=s160-c-k-c0x00ffffff-no-rj"
+        }
+      ]
+    }
+  ],
+  "lastExported": "2026-01-05T18:05:14.268Z"
 }
