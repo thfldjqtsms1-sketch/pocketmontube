@@ -1,0 +1,1818 @@
+/**
+ * MyTube Manager - Content Script Styles
+ * YouTube 사이드바 통합 스타일 (2025 최신 디자인)
+ */
+
+/* YouTube CSS 완전 격리 - 모든 mytube 요소에 적용 */
+#mytube-groups-section {
+  all: revert !important;
+  display: block !important;
+  color: #fff !important;
+}
+
+#mytube-groups-section * {
+  --yt-spec-text-primary: #fff !important;
+  --yt-spec-text-secondary: #aaa !important;
+  --yt-spec-text-primary-inverse: #fff !important;
+}
+
+/* 모든 텍스트 강제 색상 */
+#mytube-groups-section .mytube-section-title,
+#mytube-groups-section .mytube-group-name,
+#mytube-groups-section .mytube-channel-name,
+#mytube-groups-section h3,
+#mytube-groups-section span,
+#mytube-groups-section button {
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+#mytube-groups-section .mytube-group-count {
+  color: #888 !important;
+  -webkit-text-fill-color: #888 !important;
+}
+
+#mytube-groups-section .mytube-empty {
+  color: #666 !important;
+  -webkit-text-fill-color: #666 !important;
+}
+
+.mytube-sidebar-section {
+  padding: 12px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  margin: 8px 0;
+}
+
+.mytube-section-header {
+  padding: 8px 12px;
+}
+
+.mytube-section-title {
+  display: flex !important;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px !important;
+  font-weight: 500;
+  color: #aaa !important;
+  -webkit-text-fill-color: #aaa !important;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0;
+}
+
+.mytube-icon {
+  width: 20px;
+  height: 20px;
+  opacity: 0.8;
+}
+
+.mytube-groups-list {
+  margin-top: 4px;
+}
+
+.mytube-empty {
+  padding: 12px 24px;
+  text-align: center;
+  color: #666;
+  font-size: 13px;
+  font-style: italic;
+}
+
+/* 그룹 아이템 */
+.mytube-group {
+  margin: 2px 0;
+}
+
+.mytube-group-header {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.mytube-group-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+  padding: 8px 12px;
+  background: transparent;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  font-size: 14px;
+  text-align: left;
+}
+
+.mytube-group-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.mytube-chevron {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.mytube-group-icon {
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.mytube-group-name {
+  flex: 1 1 auto !important;
+  min-width: 0;
+  font-weight: 500;
+  font-size: 14px !important;
+  color: #fff !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.mytube-group-count {
+  color: #888;
+  font-size: 12px;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+/* 인페이지 열기 버튼 (화살표) */
+.mytube-open-overlay-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: transparent;
+  color: #888;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  margin-right: 8px;
+}
+
+.mytube-open-overlay-btn:hover {
+  background: rgba(255, 0, 0, 0.2);
+  color: #ff0000;
+}
+
+.mytube-open-overlay-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* 채널 목록 */
+.mytube-group-channels {
+  padding-left: 24px;
+  margin-top: 4px;
+  animation: slideDown 0.2s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.mytube-channel-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 12px;
+  color: #fff;
+  text-decoration: none;
+  transition: background-color 0.15s ease;
+  border-radius: 8px;
+  margin: 2px 8px;
+}
+
+.mytube-channel-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.mytube-channel-thumb {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  object-fit: cover;
+}
+
+.mytube-channel-thumb-placeholder {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: #555;
+  flex-shrink: 0;
+}
+
+.mytube-channel-name {
+  flex: 1;
+  font-size: 13px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Dark Mode 대응 */
+html[dark] .mytube-sidebar-section,
+ytd-app[darker-dark-theme] .mytube-sidebar-section {
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+html[dark] .mytube-group-toggle:hover,
+ytd-app[darker-dark-theme] .mytube-group-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+/* 스크롤바 스타일링 */
+.mytube-group-channels::-webkit-scrollbar {
+  width: 6px;
+}
+
+.mytube-group-channels::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.mytube-group-channels::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+
+.mytube-group-channels::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* ==================== 탭 스타일 ==================== */
+
+.mytube-tabs-container {
+  display: flex;
+  gap: 8px;
+  padding: 0 12px;
+  margin-left: 12px;
+}
+
+.mytube-group-tab {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.mytube-group-tab:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.mytube-group-tab.active {
+  background: #ff0000;
+  box-shadow: 0 2px 8px rgba(255, 0, 0, 0.3);
+}
+
+.mytube-tab-icon {
+  font-size: 16px;
+}
+
+.mytube-tab-name {
+  font-weight: 500;
+}
+
+.mytube-tab-count {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 2px 6px;
+  border-radius: 10px;
+  font-size: 12px;
+}
+
+/* ==================== 영상 그리드 스타일 ==================== */
+
+.mytube-grid-container {
+  padding: 24px;
+  background: #0f0f0f;
+  min-height: 100vh;
+}
+
+.mytube-grid-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.mytube-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.mytube-grid-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+}
+
+.mytube-video-count {
+  color: #aaa;
+  font-size: 14px;
+}
+
+.mytube-header-right {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.mytube-filter-group,
+.mytube-sort-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mytube-filter-group label,
+.mytube-sort-group label {
+  color: #aaa;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.mytube-filter-select,
+.mytube-sort-select {
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mytube-filter-select:hover,
+.mytube-sort-select:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.mytube-filter-select option,
+.mytube-sort-select option {
+  background: #282828;
+  color: #fff;
+}
+
+/* 영상 그리드 */
+.mytube-video-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+/* 빈 상태 */
+.mytube-empty-state {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  text-align: center;
+}
+
+.mytube-empty-icon {
+  width: 80px;
+  height: 80px;
+  color: #555;
+  margin-bottom: 16px;
+}
+
+.mytube-empty-text {
+  font-size: 18px;
+  font-weight: 600;
+  color: #aaa;
+  margin: 0 0 8px;
+}
+
+.mytube-empty-hint {
+  font-size: 14px;
+  color: #666;
+  margin: 0;
+}
+
+/* 영상 카드 */
+.mytube-video-card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.mytube-video-card:hover {
+  transform: translateY(-4px);
+}
+
+.mytube-video-thumbnail {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #202020;
+  margin-bottom: 12px;
+}
+
+.mytube-video-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mytube-video-duration {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  background: rgba(0, 0, 0, 0.8);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.mytube-watched-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mytube-check-icon {
+  width: 48px;
+  height: 48px;
+  color: #00ff00;
+}
+
+.mytube-video-info {
+  padding: 0 4px;
+}
+
+.mytube-video-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: #fff;
+  margin: 0 0 8px;
+  line-height: 1.4;
+  max-height: 2.8em;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.mytube-video-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.mytube-video-channel {
+  font-size: 12px;
+  color: #aaa;
+}
+
+.mytube-video-stats {
+  font-size: 12px;
+  color: #666;
+}
+
+/* 반응형 */
+@media (max-width: 1280px) {
+  .mytube-video-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .mytube-grid-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .mytube-video-grid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+  }
+}
+
+/* ==================== PocketMonTube 인페이지 UI ==================== */
+
+/* 그룹 카드 컨테이너 */
+.pocketmontube-cards-container {
+  padding: 24px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--yt-spec-10-percent-layer, rgba(255, 255, 255, 0.1));
+}
+
+.pocketmontube-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.pocketmontube-section-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--yt-spec-text-primary, #fff);
+  margin: 0;
+}
+
+.pocketmontube-logo {
+  font-size: 24px;
+}
+
+/* 전체 수집 버튼 */
+.pocketmontube-refresh-all-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #ff0000, #cc0000);
+  border: none;
+  border-radius: 24px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 2px 8px rgba(255, 0, 0, 0.3);
+}
+
+.pocketmontube-refresh-all-btn:hover {
+  background: linear-gradient(135deg, #ff3333, #ff0000);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 0, 0, 0.4);
+}
+
+.pocketmontube-refresh-all-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.pocketmontube-refresh-all-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.pocketmontube-refresh-all-btn svg.spinning {
+  animation: pocketmontube-spin 0.8s linear infinite;
+}
+
+/* 헤더 버튼 그룹 */
+.pocketmontube-header-buttons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* GitHub 동기화 버튼 */
+.pocketmontube-github-sync-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  background: linear-gradient(135deg, #333, #222);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 24px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.pocketmontube-github-sync-btn:hover {
+  background: linear-gradient(135deg, #444, #333);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.pocketmontube-github-sync-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.pocketmontube-github-sync-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.pocketmontube-github-sync-btn svg.spinning {
+  animation: pocketmontube-spin 0.8s linear infinite;
+}
+
+/* 내보내기 버튼 */
+.pocketmontube-export-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  background: linear-gradient(135deg, #0066ff, #0044cc);
+  border: none;
+  border-radius: 24px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 2px 8px rgba(0, 102, 255, 0.3);
+}
+
+.pocketmontube-export-btn:hover {
+  background: linear-gradient(135deg, #3388ff, #0066ff);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 102, 255, 0.4);
+}
+
+.pocketmontube-export-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* 그룹 카드 그리드 */
+.pocketmontube-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+}
+
+/* 개별 그룹 카드 */
+.pocketmontube-group-card {
+  background: var(--yt-spec-raised-background, #212121);
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.pocketmontube-group-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  border-color: var(--yt-spec-10-percent-layer, rgba(255, 255, 255, 0.15));
+}
+
+/* 카드 썸네일 그리드 */
+.pocketmontube-card-thumbnails {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2px;
+  aspect-ratio: 16 / 9;
+  background: #0f0f0f;
+}
+
+.pocketmontube-card-thumbnails img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pocketmontube-no-videos {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  font-size: 14px;
+}
+
+/* 카드 정보 */
+.pocketmontube-card-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+}
+
+.pocketmontube-card-icon {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.pocketmontube-card-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.pocketmontube-card-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--yt-spec-text-primary, #fff);
+  margin: 0 0 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pocketmontube-card-meta {
+  font-size: 12px;
+  color: var(--yt-spec-text-secondary, #aaa);
+  margin: 0;
+}
+
+/* 더 보기 버튼 */
+.pocketmontube-more-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  padding: 10px;
+  background: var(--yt-spec-badge-chip-background, rgba(255, 255, 255, 0.1));
+  border: none;
+  color: var(--yt-spec-text-primary, #fff);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.pocketmontube-more-btn:hover {
+  background: rgba(255, 0, 0, 0.2);
+  color: #ff0000;
+}
+
+/* ==================== 오버레이 ==================== */
+
+.pocketmontube-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pocketmontube-overlay-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(4px);
+}
+
+.pocketmontube-overlay-container {
+  position: relative;
+  width: 95%;
+  max-width: 1400px;
+  max-height: 90vh;
+  background: var(--yt-spec-base-background, #0f0f0f);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
+}
+
+/* 오버레이 헤더 */
+.pocketmontube-overlay-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--yt-spec-10-percent-layer, rgba(255, 255, 255, 0.1));
+  background: var(--yt-spec-raised-background, #212121);
+}
+
+.pocketmontube-overlay-title-area {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.pocketmontube-overlay-icon {
+  font-size: 28px;
+}
+
+.pocketmontube-overlay-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--yt-spec-text-primary, #fff);
+  margin: 0;
+}
+
+.pocketmontube-video-count {
+  font-size: 14px;
+  color: var(--yt-spec-text-secondary, #aaa);
+  margin-left: 8px;
+}
+
+.pocketmontube-overlay-close {
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: transparent;
+  color: var(--yt-spec-text-secondary, #aaa);
+  font-size: 20px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.pocketmontube-overlay-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--yt-spec-text-primary, #fff);
+}
+
+/* 헤더 액션 영역 */
+.pocketmontube-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.pocketmontube-last-update {
+  font-size: 13px;
+  color: var(--yt-spec-text-secondary, #888);
+  white-space: nowrap;
+}
+
+.pocketmontube-refresh-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--yt-spec-text-secondary, #aaa);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.pocketmontube-refresh-btn:hover {
+  background: rgba(255, 0, 0, 0.2);
+  color: #ff0000;
+}
+
+.pocketmontube-refresh-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pocketmontube-refresh-btn.spinning svg {
+  animation: pocketmontube-spin 0.8s linear infinite;
+}
+
+/* 오버레이 컨트롤 */
+.pocketmontube-overlay-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+  border-bottom: 1px solid var(--yt-spec-10-percent-layer, rgba(255, 255, 255, 0.1));
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.pocketmontube-control-left,
+.pocketmontube-control-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.pocketmontube-limit-select,
+.pocketmontube-sort-select,
+.pocketmontube-filter-select {
+  padding: 8px 16px;
+  background: var(--yt-spec-badge-chip-background, rgba(255, 255, 255, 0.1));
+  border: 1px solid var(--yt-spec-10-percent-layer, rgba(255, 255, 255, 0.2));
+  border-radius: 20px;
+  color: var(--yt-spec-text-primary, #fff);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.pocketmontube-limit-select:hover,
+.pocketmontube-sort-select:hover,
+.pocketmontube-filter-select:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.pocketmontube-limit-select option,
+.pocketmontube-sort-select option,
+.pocketmontube-filter-select option {
+  background: #282828;
+  color: #fff;
+}
+
+/* 오버레이 컨텐츠 */
+.pocketmontube-overlay-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+}
+
+/* 비디오 그리드 */
+.pocketmontube-video-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+/* 비디오 카드 */
+.pocketmontube-video-card {
+  cursor: pointer;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.2s;
+}
+
+.pocketmontube-video-card:hover {
+  transform: translateY(-4px);
+}
+
+.pocketmontube-video-card.watched .pocketmontube-video-title {
+  color: var(--yt-spec-text-secondary, #aaa);
+}
+
+.pocketmontube-thumb-container {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  background: #202020;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.pocketmontube-thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pocketmontube-duration {
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  background: rgba(0, 0, 0, 0.85);
+  color: #fff;
+  padding: 3px 6px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.pocketmontube-shorts-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: #ff0000;
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.pocketmontube-viral-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: linear-gradient(135deg, #ff6b00, #ff0000);
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.pocketmontube-watched-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.pocketmontube-video-card:hover .pocketmontube-watched-overlay {
+  opacity: 1;
+}
+
+.pocketmontube-watched-overlay span {
+  width: 36px;
+  height: 36px;
+  background: rgba(0, 200, 0, 0.9);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: #fff;
+}
+
+.pocketmontube-video-info {
+  padding: 10px 4px;
+}
+
+.pocketmontube-video-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--yt-spec-text-primary, #fff);
+  margin: 0 0 6px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 1.4;
+}
+
+.pocketmontube-channel {
+  font-size: 12px;
+  color: var(--yt-spec-text-secondary, #aaa);
+  margin: 0 0 4px;
+  text-decoration: none;
+  display: block;
+  transition: color 0.2s;
+}
+
+.pocketmontube-channel:hover {
+  color: var(--yt-spec-text-primary, #fff);
+  text-decoration: underline;
+}
+
+.pocketmontube-meta {
+  font-size: 12px;
+  color: var(--yt-spec-text-secondary, #888);
+  margin: 0;
+}
+
+/* 로딩 & 빈 상태 */
+.pocketmontube-loading,
+.pocketmontube-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  color: var(--yt-spec-text-secondary, #aaa);
+}
+
+.pocketmontube-empty svg {
+  opacity: 0.4;
+  margin-bottom: 16px;
+}
+
+.pocketmontube-empty p {
+  margin: 0;
+  font-size: 16px;
+}
+
+.pocketmontube-empty-hint {
+  font-size: 14px !important;
+  color: #666 !important;
+  margin-top: 8px !important;
+}
+
+.pocketmontube-spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid rgba(255, 255, 255, 0.1);
+  border-top-color: #ff0000;
+  border-radius: 50%;
+  animation: pocketmontube-spin 0.8s linear infinite;
+  margin-bottom: 16px;
+}
+
+@keyframes pocketmontube-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* 라이트 모드 지원 */
+html:not([dark]) .pocketmontube-cards-container,
+html:not([dark]) .pocketmontube-overlay-container {
+  --yt-spec-text-primary: #0f0f0f;
+  --yt-spec-text-secondary: #606060;
+  --yt-spec-base-background: #fff;
+  --yt-spec-raised-background: #f9f9f9;
+  --yt-spec-10-percent-layer: rgba(0, 0, 0, 0.1);
+  --yt-spec-badge-chip-background: rgba(0, 0, 0, 0.05);
+}
+
+html:not([dark]) .pocketmontube-limit-select option,
+html:not([dark]) .pocketmontube-sort-select option,
+html:not([dark]) .pocketmontube-filter-select option {
+  background: #fff;
+  color: #0f0f0f;
+}
+
+/* 스크롤바 */
+.pocketmontube-overlay-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.pocketmontube-overlay-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.pocketmontube-overlay-content::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+
+.pocketmontube-overlay-content::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+  .pocketmontube-cards-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pocketmontube-overlay-container {
+    width: 100%;
+    height: 100%;
+    max-height: 100%;
+    border-radius: 0;
+  }
+
+  .pocketmontube-video-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 12px;
+  }
+
+  .pocketmontube-overlay-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .pocketmontube-control-right {
+    flex-wrap: wrap;
+  }
+}
+
+/* ==================== 자동 수집 알림 ==================== */
+
+#pocketmontube-notification {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 99999;
+  animation: pocketmontube-slide-in 0.3s ease, pocketmontube-fade-out 0.3s ease 2.7s;
+}
+
+.pocketmontube-notif-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  background: linear-gradient(135deg, #1a1a2e, #16213e);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  color: #fff;
+  font-size: 14px;
+}
+
+.pocketmontube-notif-icon {
+  font-size: 20px;
+}
+
+.pocketmontube-notif-text {
+  line-height: 1.4;
+}
+
+.pocketmontube-notif-text strong {
+  color: #ff6b6b;
+}
+
+@keyframes pocketmontube-slide-in {
+  from {
+    transform: translateY(100px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes pocketmontube-fade-out {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+/* ==================== 비디오 카드 액션 버튼 ==================== */
+
+.pocketmontube-title-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.pocketmontube-title-row .pocketmontube-video-title {
+  flex: 1;
+  margin: 0;
+}
+
+.pocketmontube-video-actions {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.pocketmontube-video-card:hover .pocketmontube-video-actions {
+  opacity: 1;
+}
+
+.pocketmontube-force-update-btn,
+.pocketmontube-move-btn,
+.pocketmontube-save-btn {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pocketmontube-force-update-btn:hover {
+  background: rgba(255, 165, 0, 0.3);
+}
+
+.pocketmontube-move-btn:hover {
+  background: rgba(59, 130, 246, 0.3);
+}
+
+.pocketmontube-save-btn:hover {
+  background: rgba(34, 197, 94, 0.3);
+}
+
+.pocketmontube-force-update-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ==================== 폴더 이동 모달 ==================== */
+
+.pocketmontube-move-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 10002;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pocketmontube-move-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+}
+
+.pocketmontube-move-modal-content {
+  position: relative;
+  width: 90%;
+  max-width: 400px;
+  background: #282828;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
+  animation: pocketmontube-modal-in 0.2s ease;
+}
+
+.pocketmontube-move-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.pocketmontube-move-modal-close {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: #aaa;
+  font-size: 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.pocketmontube-move-modal-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.pocketmontube-move-modal-body {
+  padding: 16px;
+}
+
+.pocketmontube-move-video-title {
+  margin: 0 0 12px;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 6px;
+  font-size: 13px;
+  color: #ccc;
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pocketmontube-move-modal-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+.pocketmontube-move-modal-group-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid transparent;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.pocketmontube-move-modal-group-btn:hover {
+  background: rgba(59, 130, 246, 0.2);
+  border-color: rgba(59, 130, 246, 0.4);
+}
+
+/* ==================== 폴더 이동 드롭다운 ==================== */
+
+.pocketmontube-dropdown {
+  background: #282828;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  min-width: 180px;
+  max-height: 300px;
+  overflow-y: auto;
+  animation: pocketmontube-fade-in 0.15s ease;
+}
+
+.pocketmontube-dropdown-header {
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #aaa;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.pocketmontube-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 14px;
+  border: none;
+  background: transparent;
+  color: #fff;
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.pocketmontube-dropdown-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+@keyframes pocketmontube-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==================== 폴더 저장 모달 ==================== */
+
+.pocketmontube-save-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 10002;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pocketmontube-save-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+}
+
+.pocketmontube-save-modal-content {
+  position: relative;
+  width: 90%;
+  max-width: 400px;
+  background: #282828;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
+  animation: pocketmontube-modal-in 0.2s ease;
+}
+
+@keyframes pocketmontube-modal-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.pocketmontube-save-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.pocketmontube-save-modal-close {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: #aaa;
+  font-size: 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.pocketmontube-save-modal-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.pocketmontube-save-modal-body {
+  padding: 16px;
+}
+
+.pocketmontube-save-modal-video-title {
+  margin: 0 0 12px;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 6px;
+  font-size: 13px;
+  color: #ccc;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.pocketmontube-save-modal-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.pocketmontube-save-modal-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.pocketmontube-save-modal-group:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.pocketmontube-save-modal-group input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #22c55e;
+  cursor: pointer;
+}
+
+.pocketmontube-save-modal-group span {
+  color: #fff;
+  font-size: 14px;
+}
+
+.pocketmontube-save-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 14px 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.pocketmontube-save-modal-cancel,
+.pocketmontube-save-modal-confirm {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.pocketmontube-save-modal-cancel {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.pocketmontube-save-modal-cancel:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.pocketmontube-save-modal-confirm {
+  background: #22c55e;
+  color: #fff;
+}
+
+.pocketmontube-save-modal-confirm:hover {
+  background: #16a34a;
+}
+
+/* ==================== 폴더 전환 드롭다운 버튼 ==================== */
+
+.pocketmontube-folder-dropdown-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  margin: 0;
+  border: none;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pocketmontube-folder-dropdown-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.pocketmontube-folder-dropdown-btn .pocketmontube-overlay-title {
+  display: inline;
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--yt-spec-text-primary, #fff);
+}
+
+.pocketmontube-dropdown-arrow {
+  font-size: 10px;
+  color: #aaa;
+  transition: transform 0.2s ease;
+}
+
+.pocketmontube-folder-dropdown-btn:hover .pocketmontube-dropdown-arrow {
+  transform: translateY(2px);
+}
+
+/* ==================== 폴더 전환 드롭다운 ==================== */
+
+.pocketmontube-folder-switch-dropdown {
+  background: #282828;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+  min-width: 240px;
+  max-height: 400px;
+  overflow-y: auto;
+  animation: pocketmontube-fade-in 0.15s ease;
+}
+
+.pocketmontube-folder-switch-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 16px;
+  border: none;
+  background: transparent;
+  color: #fff;
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.pocketmontube-folder-switch-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.pocketmontube-folder-switch-item.active {
+  background: rgba(59, 130, 246, 0.2);
+}
+
+.pocketmontube-folder-switch-icon {
+  font-size: 20px;
+}
+
+.pocketmontube-folder-switch-name {
+  flex: 1;
+  font-weight: 500;
+}
+
+.pocketmontube-folder-switch-count {
+  font-size: 12px;
+  color: #888;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+/* ==================== 다운로드 버튼 (영상 오른쪽 위) ==================== */
+
+.mytube-download-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2147483647;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: rgba(0, 0, 0, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  font-family: 'Roboto', Arial, sans-serif;
+}
+
+.mytube-download-btn svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.mytube-download-btn:hover {
+  background: rgba(255, 0, 0, 0.9);
+  border-color: rgba(255, 0, 0, 0.6);
+  box-shadow: 0 4px 12px rgba(255, 0, 0, 0.4);
+  transform: scale(1.05);
+}
+
+.mytube-download-btn:active {
+  transform: scale(0.98);
+}
+
+/* 전체화면 모드 대응 */
+.ytp-fullscreen .mytube-download-btn {
+  top: 20px;
+  right: 20px;
+  padding: 10px 18px;
+  font-size: 14px;
+}
+
+.ytp-fullscreen .mytube-download-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* ==================== 숏츠용 다운로드 버튼 ==================== */
+
+.mytube-download-btn-shorts {
+  position: fixed !important;
+  top: 80px !important;
+  right: calc(50% - 250px) !important;
+  padding: 6px 12px !important;
+  font-size: 12px !important;
+  border-radius: 20px !important;
+  background: rgba(0, 0, 0, 0.7) !important;
+}
+
+.mytube-download-btn-shorts span {
+  display: none;
+}
+
+.mytube-download-btn-shorts svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* 숏츠 페이지에서 위치 미세조정 */
+@media (max-width: 1200px) {
+  .mytube-download-btn-shorts {
+    right: 20px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .mytube-download-btn-shorts {
+    top: 60px !important;
+    right: 10px !important;
+    padding: 8px !important;
+  }
+}

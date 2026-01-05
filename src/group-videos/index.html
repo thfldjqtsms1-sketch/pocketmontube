@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MyTube - 그룹 영상</title>
+  <link rel="stylesheet" href="./styles.css">
+
+<body>
+  <div id="app">
+    <!-- Header -->
+    <div id="header">
+      <div class="header-top">
+        <span id="group-icon">📁</span>
+        <div>
+          <h1 id="group-name">로딩 중...</h1>
+          <p id="video-count">0개 동영상</p>
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <div class="controls">
+        <button id="refresh-btn" type="button" title="저장된 데이터 새로고침">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15" />
+          </svg>
+          새로고침
+        </button>
+
+        <div class="channels-dropdown">
+          <button id="channels-btn" type="button" title="채널 방문하여 수집">
+            📺 채널 방문 ▼
+          </button>
+          <div id="channels-list" class="channels-list hidden">
+          </div>
+        </div>
+
+        <select id="sort-select">
+          <option value="date">최신순</option>
+          <option value="oldest">오래된순</option>
+          <option value="views">조회수순</option>
+          <option value="viral">🔥 바이럴순</option>
+        </select>
+
+        <select id="filter-select">
+          <option value="all">모든 동영상</option>
+          <option value="unwatched">시청하지 않음</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Video Grid -->
+    <div id="video-grid">
+      <!-- Videos will be rendered here -->
+    </div>
+
+    <!-- Empty State -->
+    <div id="empty-state" class="hidden">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+          d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+      </svg>
+      <p style="font-size: 18px; color: #aaa; margin-bottom: 8px;">아직 영상이 없습니다</p>
+      <p style="color: #666;">채널을 방문하면 자동으로 영상이 수집됩니다</p>
+    </div>
+
+    <!-- Loading State -->
+    <div id="loading-state">
+      <div class="spinner"></div>
+    </div>
+  </div>
+
+  <script type="module" src="./group-videos.ts"></script>
+</body>
+
+</html>
