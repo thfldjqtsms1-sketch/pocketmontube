@@ -100,9 +100,17 @@ function formatViralVideosByGroup(videosByGroup: Map<string, { group: Group; vid
             const viralScore = video.viralScore || 0;
             const rank = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}위`;
 
+            // 발행 날짜 계산
+            const hoursAgo = Math.floor((Date.now() - video.uploadedAt) / (1000 * 60 * 60));
+            const daysAgo = Math.floor(hoursAgo / 24);
+            const uploadTime = daysAgo > 0
+                ? `${daysAgo}일 전`
+                : `${hoursAgo}시간 전`;
+
             message += `${rank} <b>${escapeHtml(video.title)}</b>\n`;
-            message += `조회수: ${formatNumber(video.viewCount)}회\n`;
-            message += `바이럴: ${formatNumber(viralScore)}/h\n`;
+            message += `📅 ${uploadTime}\n`;
+            message += `👁 ${formatNumber(video.viewCount)}회\n`;
+            message += `🔥 ${formatNumber(viralScore)}/h\n`;
             message += `<a href="${video.url}">🔗 영상 보기</a>\n\n`;
         });
 
