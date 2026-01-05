@@ -1,10 +1,11 @@
 /**
  * GitHub Actions용 YouTube 영상 수집 스크립트
- * Puppeteer 없이 직접 HTTP fetch로 수집
+ * YouTube InnerTube API 사용 (youtubei.js)
  */
 
 import * as fs from 'fs';
 import * as path from 'path';
+import { Innertube } from 'youtubei.js';
 
 // 타입 정의
 interface Channel {
@@ -48,6 +49,9 @@ interface VideosData {
 const DATA_DIR = path.join(process.cwd(), 'data');
 const CHANNELS_FILE = path.join(DATA_DIR, 'channels.json');
 const VIDEOS_FILE = path.join(DATA_DIR, 'videos.json');
+
+// InnerTube 클라이언트 (전역)
+let youtubeClient: Innertube | null = null;
 
 // 유틸리티 함수
 function sleep(ms: number): Promise<void> {
@@ -124,60 +128,26 @@ async function fetchRSSVideos(channel: Channel, groupId: string): Promise<Video[
     return videos;
 }
 
-// 영상 상세 정보 가져오기 (조회수, duration)
+// 영상 상세 정보 가져오기 (InnerTube API 사용)
 async function fetchVideoDetails(videoId: string): Promise<{ viewCount: number; duration: string; isShorts: boolean } | null> {
     try {
-        const url = `https://www.youtube.com/watch?v=${videoId}`;
-        const response = await fetch(url, {
-            headers: {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-                'Accept-Language': 'en-US,en;q=0.9'
-            }
-        });
-
-        if (!response.ok) {
-            // 429 (Rate Limit)는 조용히 스킵
-            if (response.status !== 429) {
-                console.warn(`[Collect] Video fetch failed for ${videoId}: ${response.status}`);
-            }
-            return null;
+        // InnerTube 클라이언트 초기화 (처음 한 번만)
+        if (!youtubeClient) {
+            console.log('[Collect] Initializing InnerTube client...');
+            youtubeClient = await Innertube.create();
         }
 
-        const html = await response.text();
+        const info = await youtubeClient.getInfo(videoId);
+        const basicInfo = info.basic_info;
 
-        // 조회수 추출
-        let viewCount = 0;
-        const viewMatch = html.match(/"viewCount":"(\d+)"/);
-        if (viewMatch?.[1]) {
-            viewCount = parseInt(viewMatch[1], 10);
-        }
-
-        // Duration 추출 (여러 패턴)
-        let duration = '0:00';
-        let totalSeconds = 0;
-
-        // 패턴 1: lengthSeconds
-        const lengthMatch = html.match(/"lengthSeconds":"(\d+)"/);
-        if (lengthMatch?.[1]) {
-            totalSeconds = parseInt(lengthMatch[1], 10);
-            duration = formatDuration(totalSeconds);
-        }
-
-        // 패턴 2: approxDurationMs
-        if (totalSeconds === 0) {
-            const approxMatch = html.match(/"approxDurationMs":"(\d+)"/);
-            if (approxMatch?.[1]) {
-                totalSeconds = Math.floor(parseInt(approxMatch[1], 10) / 1000);
-                duration = formatDuration(totalSeconds);
-            }
-        }
-
-        // Shorts 판별 (3분 미만)
-        const isShorts = totalSeconds > 0 && totalSeconds < 180;
+        const viewCount = parseInt(basicInfo.view_count as any) || 0;
+        const totalSeconds = basicInfo.duration || 0;
+        const duration = formatDuration(totalSeconds);
+        const isShorts = (basicInfo as any).is_short || totalSeconds < 180;
 
         return { viewCount, duration, isShorts };
-    } catch (error) {
-        console.error(`[Collect] Video details error for ${videoId}:`, error);
+    } catch (error: any) {
+        console.warn(`[Collect] InnerTube failed for ${videoId}: ${error.message}`);
         return null;
     }
 }
