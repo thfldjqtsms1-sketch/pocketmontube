@@ -204,6 +204,51 @@ Extension을 새로고침하려면 `chrome://extensions/`에서 "새로고침" �
 - `data/channels.json` - 그룹 및 채널 목록
 - `data/videos.json` - 수집된 영상 데이터
 
+## 📱 Telegram 바이럴 영상 알림
+
+매시간 영상 수집 후, 바이럴 지수가 높은 영상을 Telegram으로 자동 알림 받을 수 있습니다.
+
+### 설정 방법
+
+1. **Telegram Bot 생성**
+   - Telegram에서 [@BotFather](https://t.me/BotFather) 검색
+   - `/newbot` 명령어 입력
+   - Bot 이름 입력 (예: `PocketMonTube Viral Notifier`)
+   - Bot username 입력 (예: `pocketmontube_bot`)
+   - Bot Token 복사 (예: `123456789:ABCdefGHIjklMNOpqrsTUVwxyz`)
+
+2. **Chat ID 확인**
+   - [@userinfobot](https://t.me/userinfobot) 검색
+   - `/start` 명령어 입력
+   - Chat ID 복사 (예: `123456789`)
+
+3. **GitHub Secrets 설정**
+   - GitHub 리포지토리 → Settings → Secrets and variables → Actions
+   - "New repository secret" 클릭
+   - `TELEGRAM_BOT_TOKEN`: Bot Token 입력
+   - `TELEGRAM_CHAT_ID`: Chat ID 입력
+
+4. **바이럴 임계값 조정** (선택사항)
+   - `.github/workflows/collect-videos.yml` 파일 수정
+   - `VIRAL_THRESHOLD`: 기본값 500/h (시간당 조회수)
+   - `TOP_VIRAL_COUNT`: 기본값 10개 (상위 몇 개 알림)
+
+### 알림 예시
+
+```
+🔥 바이럴 영상 알림 🔥
+
+1. 영상 제목
+   📺 채널 이름
+   👁 1.5만회 · 🔥 1.2천/h
+   ⏰ 12시간 전
+   🔗 영상 보기
+
+2. ...
+
+📊 마지막 업데이트: 2026-01-06 01:00:00
+```
+
 ## 📝 할 일 (TODO)
 
 - [ ] 그룹별 피드 필터링 (Main Feed에 그룹 Shelf 추가)
