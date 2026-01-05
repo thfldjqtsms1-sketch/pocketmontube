@@ -27,6 +27,7 @@ interface Group {
     id: string;
     name: string;
     icon?: string;
+    topCount?: number; // 폴더별 표시 개수 (기본값: 3)
 }
 
 interface ChannelsData {
@@ -92,7 +93,11 @@ function formatViralVideosByGroup(videosByGroup: Map<string, { group: Group; vid
         message += `│ 순위 │ 조회수              │ 바이럴    │\n`;
         message += `├─────┼────────────────────┼──────────┤\n`;
 
-        videos.slice(0, 5).forEach((video, index) => {
+        // 그룹별 표시 개수 (기본값: 3)
+        const topCount = group.topCount || 3;
+        const displayVideos = videos.slice(0, topCount);
+
+        displayVideos.forEach((video, index) => {
             const viralScore = video.viralScore || 0;
             const rank = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : ` ${index + 1} `;
             const views = formatNumber(video.viewCount).padStart(8);
@@ -100,14 +105,14 @@ function formatViralVideosByGroup(videosByGroup: Map<string, { group: Group; vid
 
             message += `│ ${rank} │ ${views}회      │ ${viral}/h │\n`;
 
-            // 제목 (최대 30자)
-            const title = video.title.length > 30
-                ? video.title.substring(0, 27) + '...'
+            // 제목 (최대 20자로 축소)
+            const title = video.title.length > 20
+                ? video.title.substring(0, 17) + '...'
                 : video.title;
             message += `│     │ ${escapeHtml(title)}\n`;
-            message += `│     │ <a href="${video.url}">🔗 링크</a>\n`;
+            message += `│     │ <a href="${video.url}">🔗</a>\n`;
 
-            if (index < Math.min(4, videos.length - 1)) {
+            if (index < displayVideos.length - 1) {
                 message += `├─────┼────────────────────┼──────────┤\n`;
             }
         });
