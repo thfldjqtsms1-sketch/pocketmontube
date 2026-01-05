@@ -1,5 +1,6 @@
 import type { Group, Settings, StorageData, Channel, Video } from '../types';
 import { DEFAULT_SETTINGS, STORAGE_KEYS } from '../types';
+import { GitHubSync } from './github-sync';
 
 /**
  * 2025 최신 Chrome Storage API 래퍼
@@ -21,6 +22,37 @@ export class StorageManager {
    */
   static async setGroups(groups: Group[]): Promise<void> {
     await chrome.storage.local.set({ [STORAGE_KEYS.GROUPS]: groups });
+
+    // 자동 GitHub 동기화
+    await this.autoSyncToGitHub(groups);
+  }
+
+  /**
+   * GitHub 자동 동기화 (내부 헬퍼)
+   */
+  private static async autoSyncToGitHub(groups: Group[]): Promise<void> {
+    try {
+      const settings = await this.getSettings();
+
+      // 자동 동기화가 활성화되어 있고, Token과 Repo가 설정되어 있으면 실행
+      if (settings.autoSyncChannels && settings.githubToken && settings.githubRepo) {
+        console.log('[StorageManager] Auto-syncing channels to GitHub...');
+
+        const result = await GitHubSync.updateChannels(
+          groups,
+          settings.githubToken,
+          settings.githubRepo
+        );
+
+        if (result.success) {
+          console.log('[StorageManager] GitHub sync successful');
+        } else {
+          console.warn('[StorageManager] GitHub sync failed:', result.error);
+        }
+      }
+    } catch (error) {
+      console.error('[StorageManager] Auto-sync error:', error);
+    }
   }
 
   /**

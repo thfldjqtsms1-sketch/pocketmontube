@@ -48,6 +48,9 @@ export interface Settings {
   viewCountSource: ViewCountSource;  // 조회수 소스
   dataSource: DataSource;  // 데이터 수집 방식
   youtubeApiKey?: string;  // YouTube API 키 (API 방식 선택 시 필요)
+  githubToken?: string;    // GitHub Personal Access Token
+  githubRepo?: string;     // GitHub 리포지토리 (예: username/repo)
+  autoSyncChannels?: boolean;  // 채널 추가/삭제 시 자동으로 GitHub에 푸시
 }
 
 // 조회수 소스
@@ -64,7 +67,10 @@ export const DEFAULT_SETTINGS: Settings = {
   maxVideosPerChannel: 300,
   viewCountSource: 'returnyoutubedislike',
   dataSource: 'html',  // 기본값: HTML 스크래핑
-  youtubeApiKey: ''
+  youtubeApiKey: '',
+  githubToken: '',
+  githubRepo: '',
+  autoSyncChannels: false
 };
 
 // API 사용량 추적
