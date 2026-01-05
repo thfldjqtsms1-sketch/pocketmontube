@@ -179,6 +179,24 @@ async function fetchVideoDetails(videoId: string): Promise<{ viewCount: number; 
     }
 }
 
+// Return YouTube Dislike API로 조회수 가져오기 (빠르고 429 없음)
+async function fetchViewCountFromRYD(videoId: string): Promise<number> {
+    try {
+        const url = `https://returnyoutubedislikeapi.com/votes?videoId=${videoId}`;
+        const response = await fetch(url);
+
+        if (!response.ok) {
+            return 0;
+        }
+
+        const data = await response.json();
+        return data.viewCount || 0;
+    } catch (error) {
+        console.error(`[Collect] RYD API error for ${videoId}:`, error);
+        return 0;
+    }
+}
+
 // 메인 수집 함수
 async function collectVideos(): Promise<void> {
     console.log('[Collect] Starting video collection...');
@@ -253,27 +271,24 @@ async function collectVideos(): Promise<void> {
         }
     }
 
-    // 기존 영상 조회수 업데이트 (최근 100개만)
-    console.log('[Collect] Updating view counts for recent videos...');
+    // 기존 영상 조회수 업데이트 (최근 500개만 - RYD API 사용)
+    console.log('[Collect] Updating view counts for recent videos using RYD API...');
     const recentVideos = allUpdatedVideos
         .sort((a, b) => b.uploadedAt - a.uploadedAt)
-        .slice(0, 100);
+        .slice(0, 500);
 
     for (const video of recentVideos) {
-        const details = await fetchVideoDetails(video.id);
-        if (details && details.viewCount > 0) {
-            video.viewCount = details.viewCount;
-            if (details.duration !== '0:00') {
-                video.duration = details.duration;
-                video.isShorts = details.isShorts;
-            }
+        // RYD API로 조회수만 빠르게 가져오기
+        const viewCount = await fetchViewCountFromRYD(video.id);
+        if (viewCount > 0) {
+            video.viewCount = viewCount;
             // 바이럴 스코어 재계산
             const hoursAge = Math.max(1, (Date.now() - video.uploadedAt) / (1000 * 60 * 60));
-            video.viralScore = Math.round(video.viewCount / hoursAge);
+            video.viralScore = Math.round(viewCount / hoursAge);
         }
 
-        // Rate limiting (429 방지)
-        await sleep(2000);
+        // Rate limiting (RYD는 덜 엄격함)
+        await sleep(200);
     }
 
     // 새 영상 추가
