@@ -118,14 +118,13 @@ async function main(): Promise<void> {
         return;
     }
 
-    // 바이럴 영상 필터링 및 정렬
+    // 바이럴 영상 정렬 (상위 10개, 임계값 무시)
     const viralVideos = allVideos
-        .filter(v => (v.viralScore || 0) >= VIRAL_THRESHOLD)
         .sort((a, b) => (b.viralScore || 0) - (a.viralScore || 0))
         .slice(0, TOP_COUNT);
 
     if (viralVideos.length === 0) {
-        console.log(`[Telegram] No viral videos found (threshold: ${VIRAL_THRESHOLD}/h)`);
+        console.log(`[Telegram] No videos found to send`);
         return;
     }
 
