@@ -341,8 +341,53 @@ async function collectVideos(): Promise<void> {
     // 모든 채널 수집 완료 여부 확인
     const allChannelsProcessed = !batchComplete;
 
-    // 기존 영상 조회수는 InnerTube API만 사용 (새 영상 수집 시에만 업데이트)
-    console.log('[Collect] Skipping bulk view count update (only new videos updated)');
+    // 기존 영상 조회수 업데이트 (viewCount=0 또는 duration=0:00인 영상 우선)
+    console.log('[Collect] Updating view counts for existing videos...');
+
+    // 업데이트가 필요한 영상: viewCount=0 또는 duration="0:00"
+    const videosNeedingUpdate = allUpdatedVideos.filter(v =>
+        v.viewCount === 0 || v.duration === '0:00' || !v.duration
+    );
+
+    // 바이럴 스코어 재계산이 필요한 영상 (최근 7일 이내 영상)
+    const sevenDaysAgo = Date.now() - (7 * 24 * 60 * 60 * 1000);
+    const recentVideos = allUpdatedVideos.filter(v =>
+        v.uploadedAt > sevenDaysAgo && v.viewCount > 0
+    );
+
+    // 복합: 먼저 viewCount=0인 것, 그다음 최근 영상
+    const updateCandidates = [
+        ...videosNeedingUpdate,
+        ...recentVideos.filter(v => !videosNeedingUpdate.includes(v))
+    ];
+
+    // 최대 100개만 업데이트 (rate limit 방지)
+    const MAX_UPDATE_COUNT = 100;
+    const toUpdate = updateCandidates.slice(0, MAX_UPDATE_COUNT);
+
+    console.log(`[Collect] Found ${videosNeedingUpdate.length} videos needing update, ${recentVideos.length} recent videos`);
+    console.log(`[Collect] Will update ${toUpdate.length} videos this run`);
+
+    let updatedCount = 0;
+    for (const video of toUpdate) {
+        const details = await fetchVideoDetails(video.id);
+        if (details && details.viewCount > 0) {
+            video.viewCount = details.viewCount;
+            video.duration = details.duration;
+            video.isShorts = details.isShorts;
+            if (details.isShorts) {
+                video.url = `https://www.youtube.com/shorts/${video.id}`;
+            }
+            // 바이럴 스코어 재계산
+            const hoursAge = Math.max(1, (Date.now() - video.uploadedAt) / (1000 * 60 * 60));
+            video.viralScore = Math.round(video.viewCount / hoursAge);
+            updatedCount++;
+        }
+        // Rate limiting
+        await sleep(3000);
+    }
+
+    console.log(`[Collect] Updated ${updatedCount} existing videos`);
 
     // 새 영상 추가
     const finalVideos = [...allUpdatedVideos, ...allNewVideos];
