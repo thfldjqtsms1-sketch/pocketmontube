@@ -119,71 +119,6 @@ function formatDuration(totalSeconds: number): string {
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
 }
 
-// 수집 진행 상황 텔레그램 보고
-async function sendCollectionReport(stats: {
-    processedChannels: number;
-    totalChannels: number;
-    newVideos: number;
-    totalVideos: number;
-    isFullCycle: boolean;
-    batchSize: number;
-}): Promise<void> {
-    const botToken = process.env.TELEGRAM_BOT_TOKEN;
-    const chatId = process.env.TELEGRAM_CHAT_ID;
-
-    if (!botToken || !chatId) {
-        console.log('[Telegram] Bot token or chat ID not configured. Skipping collection report.');
-        return;
-    }
-
-    const now = new Date();
-    const timeStr = now.toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' });
-    const remainingChannels = stats.totalChannels - stats.processedChannels;
-    const progress = Math.round((stats.processedChannels / stats.totalChannels) * 100);
-
-    let message = '📊 <b>영상 수집 보고</b>\n';
-    message += `━━━━━━━━━━━━━━━━━━━━\n`;
-    message += `📅 ${timeStr}\n\n`;
-
-    if (stats.isFullCycle) {
-        message += `✅ <b>전체 사이클 완료!</b>\n\n`;
-    } else {
-        message += `🔄 <b>배치 수집 완료</b>\n\n`;
-    }
-
-    message += `📺 처리한 채널: ${stats.processedChannels}/${stats.totalChannels} (${progress}%)\n`;
-    message += `🆕 새 영상: ${stats.newVideos}개\n`;
-    message += `📁 전체 영상: ${stats.totalVideos}개\n`;
-
-    if (!stats.isFullCycle) {
-        message += `\n⏳ 남은 채널: ${remainingChannels}개\n`;
-        message += `📌 다음 실행 시 이어서 수집\n`;
-    }
-
-    message += `\n💡 배치 크기: ${stats.batchSize}채널/시간`;
-
-    try {
-        const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                chat_id: chatId,
-                text: message,
-                parse_mode: 'HTML'
-            })
-        });
-
-        if (response.ok) {
-            console.log('[Telegram] Collection report sent successfully');
-        } else {
-            console.warn('[Telegram] Failed to send collection report:', await response.text());
-        }
-    } catch (error) {
-        console.error('[Telegram] Error sending collection report:', error);
-    }
-}
-
 // RSS 피드에서 영상 목록 가져오기
 async function fetchRSSVideos(channel: Channel, groupId: string): Promise<Video[]> {
     const videos: Video[] = [];
@@ -378,13 +313,9 @@ async function collectVideos(): Promise<void> {
                     startedAt: checkpoint?.startedAt || new Date().toISOString()
                 });
 
-                console.log(`[Collect] Progress: ${processedChannels}/${BATCH_SIZE} channels this batch`);
-
-                // 배치 크기에 도달하면 중단
-                if (processedChannels >= BATCH_SIZE) {
-                    console.log(`[Collect] Batch limit reached (${BATCH_SIZE} channels). Saving and exiting...`);
-                    batchComplete = true;
-                    break;
+                // 20개마다 진행 상황 로그 출력
+                if (processedChannels % 20 === 0) {
+                    console.log(`[Collect] Progress: ${processedChannels} channels processed...`);
                 }
 
                 // 채널간 딜레이 (429 방지)
@@ -439,15 +370,8 @@ async function collectVideos(): Promise<void> {
     // 전체 채널 수 계산
     const totalChannels = channelsData.groups.reduce((sum, g) => sum + g.channels.length, 0);
 
-    // 텔레그램으로 수집 보고 전송 (매 배치마다)
-    await sendCollectionReport({
-        processedChannels,
-        totalChannels,
-        newVideos: allNewVideos.length,
-        totalVideos: limitedVideos.length,
-        isFullCycle: allChannelsProcessed,
-        batchSize: BATCH_SIZE
-    });
+    // 전체 사이클 완료 시 → 바이럴 영상 알림은 telegram-notify 스크립트가 처리
+    // (중간 진행률 보고는 제거됨 - 완료 시에만 알림)
 
     console.log(`[Collect] Channels processed this batch: ${processedChannels}`);
     console.log(`[Collect] New videos: ${allNewVideos.length}`);

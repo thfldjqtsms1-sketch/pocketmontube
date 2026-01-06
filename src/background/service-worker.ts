@@ -2,11 +2,15 @@ import { StorageManager } from '../utils/storage';
 import { DEFAULT_SETTINGS } from '../types';
 import { VideoCollector } from './video-collector';
 import { YouTubeAPI, ApiUsageTracker } from '../utils/youtube-api';
+import { Innertube } from 'youtubei.js';
 
 /**
  * Background Service Worker (Manifest V3)
  * 2025 최신 Chrome Extension API 사용
  */
+
+// Global InnerTube client (initialized on first use)
+let innertubeClient: Innertube | null = null;
 
 /**
  * Extension 설치/업데이트 시 초기화
@@ -57,7 +61,7 @@ chrome.action.onClicked.addListener((tab) => {
 /**
  * 메시지 수신 처리
  */
-chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   console.log('[MyTube] Message received:', message);
 
   // 비동기 핸들러를 Promise로 래핑
@@ -79,7 +83,7 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
         try {
           const settings = await chrome.storage.local.get(['downloadServerUrl', 'downloadServerToken']);
           const serverUrl = settings.downloadServerUrl || 'http://localhost:9527';
-          const serverToken = settings.downloadServerToken || '';
+          const serverToken = settings.downloadServerToken || 'mytoken123';
 
           const headers: Record<string, string> = { 'Content-Type': 'application/json' };
           if (serverToken) {
@@ -295,6 +299,128 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
             }
 
 
+          } else if (dataSource === 'innertube_github') {
+            // InnerTube (GitHub 동기화) - InnerTube API로 모든 영상의 조회수와 duration 업데이트
+            console.log('[MyTube] Using InnerTube API for full metadata update');
+
+            // 1. RSS 피드로 새 영상 수집 (기존 로직 유지)
+            const newVideos: any[] = [];
+            const existingIds = new Set((group.videos || []).map(v => v.id));
+
+            for (const channel of group.channels || []) {
+              try {
+                const rssUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${channel.id}`;
+                const response = await fetch(rssUrl);
+
+                if (response.ok) {
+                  const xml = await response.text();
+                  const entryMatches = xml.matchAll(/<entry>([\s\S]*?)<\/entry>/g);
+
+                  for (const match of entryMatches) {
+                    const entryXml = match[1];
+                    const videoIdMatch = entryXml.match(/<yt:videoId>([^<]+)<\/yt:videoId>/);
+                    const videoId = videoIdMatch?.[1];
+                    if (!videoId || existingIds.has(videoId)) continue;
+
+                    const titleMatch = entryXml.match(/<title>([^<]+)<\/title>/);
+                    const publishedMatch = entryXml.match(/<published>([^<]+)<\/published>/);
+
+                    newVideos.push({
+                      id: videoId,
+                      title: titleMatch?.[1] || 'Unknown',
+                      channelId: channel.id,
+                      channelName: channel.name,
+                      thumbnail: `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`,
+                      duration: '0:00',
+                      viewCount: 0,
+                      uploadedAt: publishedMatch ? new Date(publishedMatch[1]).getTime() : Date.now(),
+                      url: `https://www.youtube.com/watch?v=${videoId}`,
+                      watched: false,
+                      groupId,
+                      isShorts: false,
+                      hasExactDate: !!publishedMatch
+                    });
+                  }
+                }
+              } catch (e) {
+                console.warn(`[MyTube] RSS failed for ${channel.name}:`, e);
+              }
+            }
+
+            if (newVideos.length > 0) {
+              await StorageManager.addVideosToGroup(groupId, newVideos);
+              newVideosCount = newVideos.length;
+            }
+
+            // 2. InnerTube API로 ALL 영상의 메타데이터 업데이트
+            const updatedGroup = await StorageManager.getGroup(groupId);
+            const allVideos = updatedGroup?.videos || [];
+
+            // 우선순위: duration이 없거나 0:00인 영상 먼저, 그 다음 모든 영상
+            const videosNeedingDuration = allVideos.filter(
+              v => !v.duration || v.duration === '0:00'
+            );
+            const videosWithDuration = allVideos.filter(
+              v => v.duration && v.duration !== '0:00'
+            );
+
+            const videosToUpdate = [...videosNeedingDuration, ...videosWithDuration];
+            const updates: { videoId: string; viewCount: number; uploadedAt?: number | null; duration?: string | null }[] = [];
+
+            const BATCH_SIZE = 5;
+            const totalBatches = Math.ceil(videosToUpdate.length / BATCH_SIZE);
+
+            console.log(`[MyTube] Updating ${videosToUpdate.length} videos (${videosNeedingDuration.length} need duration)`);
+
+            for (let i = 0; i < videosToUpdate.length; i += BATCH_SIZE) {
+              const batch = videosToUpdate.slice(i, i + BATCH_SIZE);
+              const batchNumber = Math.floor(i / BATCH_SIZE) + 1;
+
+              console.log(`[MyTube] Processing batch ${batchNumber}/${totalBatches}...`);
+
+              // UI에 진행률 전송 (content script가 있는 탭으로)
+              if (sender.tab?.id) {
+                chrome.tabs.sendMessage(sender.tab.id, {
+                  type: 'INNERTUBE_PROGRESS',
+                  current: i + batch.length,
+                  total: videosToUpdate.length,
+                  groupId: groupId
+                }).catch(() => {
+                  console.log('[MyTube] Failed to send progress to tab');
+                });
+              }
+
+              const batchResults = await Promise.all(
+                batch.map(async (video) => {
+                  const result = await fetchVideoDetailsWithInnerTube(video.id);
+                  if (result && result.viewCount > 0) {
+                    return {
+                      videoId: video.id,
+                      viewCount: result.viewCount,
+                      uploadedAt: result.uploadedAt,
+                      duration: result.duration
+                    };
+                  }
+                  return null;
+                })
+              );
+
+              for (const result of batchResults) {
+                if (result) updates.push(result);
+              }
+
+              // Rate limiting
+              if (i + BATCH_SIZE < videosToUpdate.length) {
+                await new Promise(resolve => setTimeout(resolve, 1000));
+              }
+            }
+
+            if (updates.length > 0) {
+              await StorageManager.updateVideoViewCounts(groupId, updates, true);
+              viewCountsUpdated = updates.length;
+            }
+
+            console.log(`[MyTube] InnerTube update complete: ${updates.length}/${videosToUpdate.length} videos updated`);
 
           } else {
             // 기존 방식: RSS + API/직접fetch
@@ -773,35 +899,118 @@ self.addEventListener('activate', (_event) => {
 });
 
 /**
- * Return YouTube Dislike API로 조회수 가져오기 (빠르고 429 에러 없음)
+ * HTTP 직접 방식: YouTube watch 페이지에서 ytInitialPlayerResponse 파싱
+ * Service Worker에서 안정적으로 동작 (InnerTube 라이브러리 미사용)
  */
 async function fetchViewCountDirectly(videoId: string): Promise<{ viewCount: number; uploadedAt: number | null; duration: string | null } | null> {
   try {
-    // Return YouTube Dislike API 사용
-    const url = `https://returnyoutubedislikeapi.com/votes?videoId=${videoId}`;
-    const res = await fetch(url);
+    // YouTube watch 페이지 가져오기
+    const url = `https://www.youtube.com/watch?v=${videoId}`;
+    const response = await fetch(url, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Accept-Language': 'ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7'
+      }
+    });
 
-    if (!res.ok) {
-      console.log(`[MyTube] RYD API failed for ${videoId}: HTTP ${res.status}`);
+    if (!response.ok) {
+      console.log(`[MyTube] HTTP fetch failed for ${videoId}: ${response.status}`);
       return null;
     }
 
-    const data = await res.json();
-    const viewCount = data.viewCount || 0;
+    const html = await response.text();
 
-    if (viewCount === 0) {
-      console.log(`[MyTube] No view count data for ${videoId}`);
+    // ytInitialPlayerResponse JSON 추출
+    const playerMatch = html.match(/ytInitialPlayerResponse\s*=\s*(\{.+?\});/s);
+    if (!playerMatch) {
+      console.log(`[MyTube] No ytInitialPlayerResponse found for ${videoId}`);
       return null;
     }
 
-    console.log(`[MyTube] RYD API success for ${videoId}: ${viewCount} views`);
+    let playerData;
+    try {
+      playerData = JSON.parse(playerMatch[1]);
+    } catch (e) {
+      console.log(`[MyTube] Failed to parse playerResponse for ${videoId}`);
+      return null;
+    }
 
-    // RYD API는 조회수만 제공하므로 uploadedAt과 duration은 null
-    return { viewCount, uploadedAt: null, duration: null };
+    // viewCount 추출
+    let viewCount = 0;
+    const viewCountText = playerData?.videoDetails?.viewCount;
+    if (viewCountText) {
+      viewCount = parseInt(viewCountText, 10) || 0;
+    }
+
+    // duration 추출 (초 단위)
+    let duration: string | null = null;
+    const lengthSeconds = parseInt(playerData?.videoDetails?.lengthSeconds, 10);
+    if (lengthSeconds && lengthSeconds > 0) {
+      duration = formatDuration(lengthSeconds);
+    }
+
+    // uploadedAt 추출 (microformat에서)
+    let uploadedAt: number | null = null;
+    const publishDate = playerData?.microformat?.playerMicroformatRenderer?.publishDate;
+    if (publishDate) {
+      uploadedAt = new Date(publishDate).getTime();
+    }
+
+    if (viewCount === 0 && !duration) {
+      console.log(`[MyTube] No data extracted for ${videoId}`);
+      return null;
+    }
+
+    console.log(`[MyTube] HTTP direct: ${videoId} viewCount=${viewCount}, duration=${duration}`);
+    return { viewCount, uploadedAt, duration };
   } catch (err) {
-    console.log(`[MyTube] RYD API error for ${videoId}:`, err);
+    console.log(`[MyTube] HTTP direct error for ${videoId}:`, err);
     return null;
   }
+}
+
+/**
+ * InnerTube API로 영상 상세 정보 가져오기 (viewCount + duration)
+ */
+async function fetchVideoDetailsWithInnerTube(videoId: string): Promise<{
+  viewCount: number;
+  uploadedAt: number | null;
+  duration: string | null;
+} | null> {
+  try {
+    // Initialize InnerTube client (once)
+    if (!innertubeClient) {
+      console.log('[MyTube] Initializing InnerTube client...');
+      innertubeClient = await Innertube.create();
+    }
+
+    const info = await innertubeClient.getInfo(videoId);
+    const basicInfo = info.basic_info;
+
+    const viewCount = parseInt(basicInfo.view_count as any) || 0;
+    const totalSeconds = basicInfo.duration || 0;
+    const duration = formatDuration(totalSeconds);
+    const uploadedAt = basicInfo.start_timestamp?.getTime() || null;
+
+    return { viewCount, uploadedAt, duration };
+  } catch (error: any) {
+    console.warn(`[MyTube] InnerTube failed for ${videoId}: ${error.message}`);
+    return null;
+  }
+}
+
+/**
+ * 초 단위를 MM:SS 또는 HH:MM:SS 형식으로 변환
+ */
+function formatDuration(totalSeconds: number): string {
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+
+  if (hours > 0) {
+    return `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  }
+  return `${minutes}:${seconds.toString().padStart(2, '0')}`;
 }
 
 /**
