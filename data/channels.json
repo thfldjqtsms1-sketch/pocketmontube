@@ -3,7 +3,6 @@
     {
       "id": "b9fc252f-4e0f-46d2-b2cf-a4cb3bce2c3a",
       "name": "유머꾼",
-      "topCount": 8,
       "channels": [
         {
           "id": "UCLJp0Ixgq2dsYJPWsjmlm6w",
@@ -383,7 +382,6 @@
     {
       "id": "66cc545a-8195-483a-8295-f81a022b3a72",
       "name": "리얼동물감동",
-      "topCount": 5,
       "channels": [
         {
           "id": "UCrNxXRRBPpQ6ujrHiRrkb2Q",
@@ -525,7 +523,6 @@
     {
       "id": "1cfe910a-d30d-40e0-b7c7-8e433eee136c",
       "name": "고양이드라마",
-      "topCount": 5,
       "channels": [
         {
           "id": "UCe3rGX14dqTb843Rp1w3VKA",
@@ -587,7 +584,6 @@
     {
       "id": "126e26f5-3719-4efc-8a0f-fbc52dd43bd5",
       "name": "바이럴",
-      "topCount": 5,
       "channels": [
         {
           "id": "@BandarApnaDost",
@@ -599,7 +595,6 @@
     {
       "id": "f441a49f-07c3-4d2c-b719-c8728d7dd8e7",
       "name": "트로트",
-      "topCount": 5,
       "channels": [
         {
           "id": "@%ED%8A%B8%EB%A1%9C%ED%8A%B8%EC%83%88%EC%8B%9C%EB%8C%80",
@@ -646,7 +641,6 @@
     {
       "id": "fe6a7410-ebbf-4dc3-ac6d-a3354a52b628",
       "name": "사연",
-      "topCount": 5,
       "channels": [
         {
           "id": "UCrtZDHeWyWmc_PXYh_bPQog",
@@ -709,5 +703,5 @@
       ]
     }
   ],
-  "lastExported": "2026-01-06T11:30:53.243Z"
+  "lastExported": "2026-01-06T22:45:10.021Z"
 }
