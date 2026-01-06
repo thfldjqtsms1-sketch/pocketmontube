@@ -34,7 +34,7 @@ jobs:
         run: npm run collect
         env:
           GITHUB_ACTIONS: true
-          BATCH_SIZE: '50'
+          BATCH_SIZE: '20'
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
 

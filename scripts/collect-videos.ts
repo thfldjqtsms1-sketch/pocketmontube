@@ -439,7 +439,7 @@ async function collectVideos(): Promise<void> {
     // 전체 채널 수 계산
     const totalChannels = channelsData.groups.reduce((sum, g) => sum + g.channels.length, 0);
 
-    // 텔레그램으로 수집 보고 전송
+    // 텔레그램으로 수집 보고 전송 (매 배치마다)
     await sendCollectionReport({
         processedChannels,
         totalChannels,
