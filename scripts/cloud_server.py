@@ -6,6 +6,7 @@ os.environ['PATH'] = os.path.expanduser('~/.deno/bin') + ':' + os.environ.get('P
 import threading
 from pathlib import Path
 from datetime import datetime
+from urllib.parse import quote
 import yt_dlp
 from flask import Flask, request, jsonify, send_file, Response
 from flask_cors import CORS
@@ -228,7 +229,7 @@ def files():
                     <div class="file-name"><span class="icon">{icon}</span>{name}</div>
                     <div class="file-meta">{size_mb:.1f} MB</div>
                 </div>
-                <a href="/files/{name}?token={token}" class="download-btn" download>⬇️ 다운로드</a>
+                <a href="/files/{quote(name)}?token={token}" class="download-btn" download="{name}">⬇️ 다운로드</a>
             </div>
 '''
     

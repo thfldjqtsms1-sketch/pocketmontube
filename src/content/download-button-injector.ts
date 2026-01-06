@@ -191,11 +191,33 @@ export class DownloadButtonInjector {
     }
 
     private handleDownload(videoId: string) {
-        // 여러 다운로드 옵션 제공을 위한 드롭다운 (간단한 버전)
-        const downloadUrl = `https://www.y2mate.com/youtube/${videoId}`;
+        // 다운로드 옵션 선택
+        const mode = prompt('다운로드 옵션을 선택하세요:\n1. 영상 (video)\n2. 음성 (audio)\n3. 자막 (subs)', 'video');
 
-        // 새 탭에서 다운로드 페이지 열기
-        window.open(downloadUrl, '_blank');
+        if (!mode) return; // 취소
+
+        const validMode = mode === 'audio' ? 'audio' : mode === 'subs' ? 'subs' : 'video';
+
+        // 백그라운드 스크립트로 다운로드 요청
+        chrome.runtime.sendMessage(
+            {
+                type: 'DOWNLOAD_VIDEO',
+                videoId: videoId,
+                mode: validMode
+            },
+            (response) => {
+                if (response && response.success) {
+                    console.log('[MyTube] Download started:', response.message);
+                    // 파일 목록 페이지 열기
+                    if (response.filesUrl) {
+                        window.open(response.filesUrl, '_blank');
+                    }
+                } else {
+                    console.error('[MyTube] Download failed:', response?.error);
+                    alert('다운로드 실패: ' + (response?.error || '알 수 없는 오류'));
+                }
+            }
+        );
     }
 
     private removeButton() {
