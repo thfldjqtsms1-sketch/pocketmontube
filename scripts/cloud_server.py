@@ -22,6 +22,9 @@ def check_token():
     """토큰 확인"""
     auth = request.headers.get('Authorization', '').replace('Bearer ', '')
     token = auth or request.args.get('token', '')
+    print(f"[DEBUG] Expected TOKEN: {TOKEN}")
+    print(f"[DEBUG] Received token: {token}")
+    print(f"[DEBUG] Match: {token == TOKEN}")
     return token == TOKEN
 
 def dl(vid, mode):
