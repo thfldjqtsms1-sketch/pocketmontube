@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-01-06T15:38:44.245Z",
+  "lastUpdated": "2026-01-06T16:45:21.045Z",
   "videos": [
     {
       "id": "_eaLsO_JnPg",
@@ -11,6 +11,20 @@
       "viewCount": 0,
       "uploadedAt": 1767713149000,
       "url": "https://www.youtube.com/shorts/_eaLsO_JnPg",
+      "isShorts": true,
+      "groupId": "b9fc252f-4e0f-46d2-b2cf-a4cb3bce2c3a",
+      "viralScore": 0
+    },
+    {
+      "id": "0ekwcoBUlnQ",
+      "title": "유럽여행 ㅋㅋㅋ",
+      "channelId": "UCGCWLJIxhjAT7uN3ghhd2fw",
+      "channelName": "박억만 회장",
+      "thumbnail": "https://i.ytimg.com/vi/0ekwcoBUlnQ/hqdefault.jpg",
+      "duration": "0:00",
+      "viewCount": 0,
+      "uploadedAt": 1767711579000,
+      "url": "https://www.youtube.com/shorts/0ekwcoBUlnQ",
       "isShorts": true,
       "groupId": "b9fc252f-4e0f-46d2-b2cf-a4cb3bce2c3a",
       "viralScore": 0
