@@ -20,9 +20,9 @@ DIR = Path(os.environ.get('DOWNLOAD_DIR', '/home/bitnami/downloads'))
 DIR.mkdir(parents=True, exist_ok=True)
 
 def check_token():
-    """토큰 확인"""
+    """토큰 확인 (헤더, URL 파라미터, 쿠키 순서로 확인)"""
     auth = request.headers.get('Authorization', '').replace('Bearer ', '')
-    token = auth or request.args.get('token', '')
+    token = auth or request.args.get('token', '') or request.cookies.get('download_token', '')
     print(f"[DEBUG] Expected TOKEN: {TOKEN}")
     print(f"[DEBUG] Received token: {token}")
     print(f"[DEBUG] Match: {token == TOKEN}")
@@ -240,7 +240,11 @@ def files():
 </body>
 </html>'''
     
-    return Response(html, mimetype='text/html')
+    # 토큰을 쿠키에 저장하여 다운로드 시 인증 유지
+    response = Response(html, mimetype='text/html')
+    if token:
+        response.set_cookie('download_token', token, httponly=True, samesite='Lax', max_age=86400)  # 24시간
+    return response
 
 @app.route('/files/<path:filename>')
 def get_file(filename):
