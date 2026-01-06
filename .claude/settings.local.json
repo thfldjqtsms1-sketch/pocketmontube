@@ -9,7 +9,20 @@
       "Bash(pkill:*)",
       "Bash(git add:*)",
       "Bash(git commit:*)",
-      "Bash(git push)"
+      "Bash(git push)",
+      "Bash(node test-telegram.js:*)",
+      "Bash(gh secret set:*)",
+      "Bash(gh secret:*)",
+      "Bash(gh workflow run:*)",
+      "Bash(gh run list:*)",
+      "Bash(git pull:*)",
+      "Bash(npm run telegram-notify:*)",
+      "Bash(gh run cancel:*)",
+      "Bash(node test-invidious.js:*)",
+      "Bash(node test-innertube.js:*)",
+      "Bash(node test-collect-100.js:*)",
+      "Bash(findstr:*)",
+      "Bash(tee:*)"
     ]
   }
 }

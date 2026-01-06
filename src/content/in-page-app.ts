@@ -619,6 +619,18 @@ export class InPageApp {
         this.showMoveToFolderModal(video);
       });
     });
+
+    // 다운로드 버튼
+    content.querySelectorAll('.pocketmontube-download-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const videoId = (btn as HTMLElement).dataset.videoId!;
+        const video = videos.find(v => v.id === videoId);
+        if (!video) return;
+
+        this.showDownloadMenu(btn as HTMLElement, video);
+      });
+    });
   }
 
   /**
@@ -718,6 +730,7 @@ export class InPageApp {
           <div class="pocketmontube-title-row">
             <h3 class="pocketmontube-video-title" title="${this.escapeHtml(video.title)}">${this.escapeHtml(video.title)}</h3>
             <div class="pocketmontube-video-actions">
+              <button class="pocketmontube-download-btn" data-video-id="${video.id}" title="다운로드">⬇</button>
               <button class="pocketmontube-force-update-btn" data-video-id="${video.id}" title="강제 업데이트 (조회수/날짜)">🔄</button>
               <button class="pocketmontube-move-btn" data-video-id="${video.id}" title="다른 폴더로 복사">📂</button>
             </div>
@@ -730,6 +743,95 @@ export class InPageApp {
         </div>
       </div>
     `;
+  }
+
+  /**
+   * 다운로드 메뉴 표시
+   */
+  private showDownloadMenu(btn: HTMLElement, video: Video) {
+    // 기존 메뉴 제거
+    document.querySelectorAll('.pocketmontube-download-menu').forEach(m => m.remove());
+
+    const menu = document.createElement('div');
+    menu.className = 'pocketmontube-download-menu';
+    menu.innerHTML = `
+      <button class="pocketmontube-download-menu-item" data-action="video">
+        🎬 영상 다운로드
+      </button>
+      <button class="pocketmontube-download-menu-item" data-action="audio">
+        🎵 MP3 추출
+      </button>
+      <button class="pocketmontube-download-menu-item" data-action="subs">
+        📝 자막 추출
+      </button>
+    `;
+
+    // 위치 설정
+    const rect = btn.getBoundingClientRect();
+    menu.style.position = 'fixed';
+    menu.style.top = `${rect.bottom + 4}px`;
+    menu.style.left = `${rect.left - 100}px`;
+    menu.style.zIndex = '10002';
+
+    document.body.appendChild(menu);
+
+    // 메뉴 아이템 클릭
+    menu.querySelectorAll('.pocketmontube-download-menu-item').forEach(item => {
+      item.addEventListener('click', async () => {
+        const action = (item as HTMLElement).dataset.action;
+
+        // Service Worker를 통해 다운로드 요청 (HTTPS 혼합 콘텐츠 우회)
+        try {
+          const response = await chrome.runtime.sendMessage({
+            type: 'DOWNLOAD_VIDEO',
+            videoId: video.id,
+            mode: action
+          });
+
+          if (response && response.success) {
+            const openFiles = confirm(
+              `✅ 다운로드 시작!\n\n${response.message}\n\n파일 목록 페이지를 열까요? (다운로드 완료 후 파일 받기)`
+            );
+            if (openFiles && response.filesUrl) {
+              window.open(response.filesUrl, '_blank');
+            }
+          } else if (response && response.error) {
+            throw new Error(response.error);
+          } else {
+            throw new Error('서버 응답 없음');
+          }
+        } catch (error) {
+          // 서버가 안 돌아가면 명령어 복사 폴백
+          const videoUrl = video.url || `https://www.youtube.com/watch?v=${video.id}`;
+          let cmd = '';
+          if (action === 'video') {
+            cmd = `yt-dlp "${videoUrl}"`;
+          } else if (action === 'audio') {
+            cmd = `yt-dlp -x --audio-format mp3 "${videoUrl}"`;
+          } else if (action === 'subs') {
+            cmd = `yt-dlp --write-auto-sub --sub-lang ko --convert-subs=srt --skip-download "${videoUrl}"`;
+          }
+
+          navigator.clipboard.writeText(cmd).then(() => {
+            alert(`⚠️ 다운로드 서버 연결 실패\n\n명령어가 복사되었습니다:\n${cmd}`);
+          }).catch(() => {
+            prompt('다운로드 서버에 연결할 수 없습니다.\n아래 명령어를 복사하세요:', cmd);
+          });
+        }
+
+        menu.remove();
+      });
+    });
+
+    // 외부 클릭 시 닫기
+    setTimeout(() => {
+      document.addEventListener('click', function closeMenu(e) {
+        if (!menu.contains(e.target as Node)) {
+          menu.remove();
+          document.removeEventListener('click', closeMenu);
+        }
+      });
+    }, 0);
   }
 
   /**

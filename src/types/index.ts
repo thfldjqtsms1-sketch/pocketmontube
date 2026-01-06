@@ -57,7 +57,7 @@ export interface Settings {
 export type ViewCountSource = 'returnyoutubedislike' | 'directfetch';
 
 // 데이터 수집 방식
-export type DataSource = 'html' | 'youtube_api';
+export type DataSource = 'html' | 'youtube_api' | 'innertube_github';
 
 export const DEFAULT_SETTINGS: Settings = {
   defaultView: 'all',

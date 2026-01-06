@@ -1816,3 +1816,67 @@ html:not([dark]) .pocketmontube-filter-select option {
     padding: 8px !important;
   }
 }
+
+/* ==================== PocketMonTube 다운로드 버튼 (오버레이용) ==================== */
+
+.pocketmontube-download-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 4px;
+  border-radius: 4px;
+  transition: all 0.2s;
+  opacity: 0.7;
+}
+
+.pocketmontube-download-btn:hover {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.1);
+  transform: scale(1.1);
+}
+
+/* 다운로드 메뉴 드롭다운 */
+.pocketmontube-download-menu {
+  background: #282828;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  min-width: 180px;
+  animation: pocketmontube-menu-appear 0.15s ease;
+}
+
+@keyframes pocketmontube-menu-appear {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.pocketmontube-download-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px 16px;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.pocketmontube-download-menu-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.pocketmontube-download-menu-item:not(:last-child) {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}

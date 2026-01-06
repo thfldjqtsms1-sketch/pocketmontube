@@ -73,6 +73,43 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
         // 수동 영상 수집 트리거
         await VideoCollector.collectAllVideos();
         sendResponse({ success: true });
+      } else if (message.type === 'DOWNLOAD_VIDEO') {
+        // 다운로드 서버에 요청 (HTTPS 혼합 콘텐츠 우회)
+        const { videoId, mode } = message;
+        try {
+          const settings = await chrome.storage.local.get(['downloadServerUrl', 'downloadServerToken']);
+          const serverUrl = settings.downloadServerUrl || 'http://localhost:9527';
+          const serverToken = settings.downloadServerToken || '';
+
+          const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+          if (serverToken) {
+            headers['Authorization'] = `Bearer ${serverToken}`;
+          }
+
+          const response = await fetch(`${serverUrl}/download`, {
+            method: 'POST',
+            headers,
+            body: JSON.stringify({ videoId, mode })
+          });
+
+          if (response.ok) {
+            const result = await response.json();
+            // 파일 목록 페이지 URL 생성
+            const filesUrl = `${serverUrl}/files?token=${serverToken}`;
+            sendResponse({
+              success: true,
+              message: result.message || 'Started',
+              filesUrl: filesUrl
+            });
+          } else if (response.status === 401) {
+            sendResponse({ success: false, error: '인증 실패: 토큰을 확인하세요.' });
+          } else {
+            sendResponse({ success: false, error: `서버 오류: ${response.status}` });
+          }
+        } catch (error) {
+          console.error('[MyTube] Download request failed:', error);
+          sendResponse({ success: false, error: '서버 연결 실패' });
+        }
       } else if (message.type === 'COLLECT_GROUP_VIDEOS') {
         // 특정 그룹만 수집
         const { groupId } = message;
@@ -499,7 +536,7 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
           // GitHub raw 파일 URL
           const videosUrl = repoUrl
             ? `${repoUrl}/raw/main/data/videos.json`
-            : 'https://raw.githubusercontent.com/pocketmontube/pocketmontube/main/data/videos.json';
+            : 'https://raw.githubusercontent.com/thfldjqtsms1-sketch/pocketmontube/main/data/videos.json';
 
           console.log(`[MyTube] Fetching from: ${videosUrl}`);
           const response = await fetch(videosUrl);
@@ -568,6 +605,110 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
         };
 
         sendResponse({ success: true, data: exportData });
+      } else if (message.type === 'PUSH_VIDEOS_TO_GITHUB') {
+        // 로컬 영상 데이터를 GitHub videos.json에 푸시
+        console.log('[MyTube] Pushing videos to GitHub...');
+
+        try {
+          const settings = await StorageManager.getSettings();
+          const githubToken = settings.githubToken;
+          const githubRepo = settings.githubRepo;
+
+          if (!githubToken || !githubRepo) {
+            sendResponse({ success: false, error: 'GitHub Token 또는 Repo가 설정되지 않았습니다.' });
+            return;
+          }
+
+          const [owner, repo] = githubRepo.split('/');
+          if (!owner || !repo) {
+            sendResponse({ success: false, error: '잘못된 리포지토리 형식입니다.' });
+            return;
+          }
+
+          // 모든 그룹에서 영상 수집
+          const groups = await StorageManager.getGroups();
+          const allVideos: any[] = [];
+
+          for (const group of groups) {
+            if (group.videos && group.videos.length > 0) {
+              for (const video of group.videos) {
+                allVideos.push({
+                  id: video.id,
+                  title: video.title,
+                  channelId: video.channelId,
+                  channelName: video.channelName,
+                  thumbnail: video.thumbnail,
+                  duration: video.duration,
+                  viewCount: video.viewCount,
+                  uploadedAt: video.uploadedAt,
+                  url: video.url,
+                  isShorts: video.isShorts,
+                  groupId: group.id,
+                  viralScore: video.viralScore
+                });
+              }
+            }
+          }
+
+          console.log(`[MyTube] Total videos to push: ${allVideos.length}`);
+
+          // videos.json 생성
+          const videosData = {
+            lastUpdated: new Date().toISOString(),
+            videos: allVideos
+          };
+
+          const content = JSON.stringify(videosData, null, 2);
+          const encodedContent = btoa(unescape(encodeURIComponent(content)));
+
+          // 기존 파일의 SHA 가져오기
+          const getUrl = `https://api.github.com/repos/${owner}/${repo}/contents/data/videos.json`;
+          let sha: string | undefined;
+
+          try {
+            const getResponse = await fetch(getUrl, {
+              headers: {
+                'Authorization': `Bearer ${githubToken}`,
+                'Accept': 'application/vnd.github.v3+json'
+              }
+            });
+            if (getResponse.ok) {
+              const existingFile = await getResponse.json();
+              sha = existingFile.sha;
+            }
+          } catch (e) {
+            console.log('[MyTube] videos.json does not exist, creating new file');
+          }
+
+          // 파일 업데이트 또는 생성
+          const putUrl = `https://api.github.com/repos/${owner}/${repo}/contents/data/videos.json`;
+          const putResponse = await fetch(putUrl, {
+            method: 'PUT',
+            headers: {
+              'Authorization': `Bearer ${githubToken}`,
+              'Accept': 'application/vnd.github.v3+json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              message: `chore: push ${allVideos.length} videos from extension [${new Date().toLocaleString('ko-KR')}]`,
+              content: encodedContent,
+              sha: sha,
+              branch: 'main'
+            })
+          });
+
+          if (!putResponse.ok) {
+            const error = await putResponse.text();
+            console.error('[MyTube] GitHub push failed:', error);
+            sendResponse({ success: false, error: `GitHub API 오류: ${putResponse.status}` });
+          } else {
+            console.log(`[MyTube] Successfully pushed ${allVideos.length} videos to GitHub`);
+            sendResponse({ success: true, count: allVideos.length });
+          }
+        } catch (error) {
+          console.error('[MyTube] Push to GitHub error:', error);
+          sendResponse({ success: false, error: String(error) });
+        }
       } else {
         sendResponse({ success: false, error: 'Unknown message type' });
       }
@@ -632,109 +773,51 @@ self.addEventListener('activate', (_event) => {
 });
 
 /**
- * 직접 YouTube 페이지에서 조회수, 발행일, duration 가져오기
+ * Return YouTube Dislike API로 조회수 가져오기 (빠르고 429 에러 없음)
  */
 async function fetchViewCountDirectly(videoId: string): Promise<{ viewCount: number; uploadedAt: number | null; duration: string | null } | null> {
   try {
-    const url = `https://www.youtube.com/watch?v=${videoId}`;
-    const res = await fetch(url, {
-      headers: {
-        'Accept-Language': 'en-US,en;q=0.9'
-      }
-    });
+    // Return YouTube Dislike API 사용
+    const url = `https://returnyoutubedislikeapi.com/votes?videoId=${videoId}`;
+    const res = await fetch(url);
 
     if (!res.ok) {
-      console.log(`[MyTube] Direct fetch failed for ${videoId}: HTTP ${res.status}`);
+      console.log(`[MyTube] RYD API failed for ${videoId}: HTTP ${res.status}`);
       return null;
     }
 
-    const html = await res.text();
+    const data = await res.json();
+    const viewCount = data.viewCount || 0;
 
-    // ytInitialPlayerResponse에서 조회수 추출
-    const match = html.match(/"viewCount":"(\d+)"/);
-    if (match && match[1]) {
-      const viewCount = parseInt(match[1], 10);
-
-      // 발행일도 추출
-      let uploadedAt: number | null = null;
-      const dateMatch = html.match(/"publishDate":"(\d{4}-\d{2}-\d{2})"/);
-      if (dateMatch && dateMatch[1]) {
-        uploadedAt = new Date(dateMatch[1]).getTime();
-      } else {
-        // 백업: uploadDate 시도
-        const uploadDateMatch = html.match(/"uploadDate":"([^"]+)"/);
-        if (uploadDateMatch && uploadDateMatch[1]) {
-          uploadedAt = new Date(uploadDateMatch[1]).getTime();
-        }
-      }
-
-      // duration 추출 (여러 패턴 시도)
-      let duration: string | null = null;
-
-      // 패턴 1: lengthSeconds (가장 일반적)
-      const lengthMatch = html.match(/"lengthSeconds":"(\d+)"/);
-      if (lengthMatch && lengthMatch[1]) {
-        const totalSeconds = parseInt(lengthMatch[1], 10);
-        duration = formatDuration(totalSeconds);
-      }
-
-      // 패턴 2: approxDurationMs (숏폼에서 자주 사용됨)
-      if (!duration) {
-        const approxMatch = html.match(/"approxDurationMs":"(\d+)"/);
-        if (approxMatch && approxMatch[1]) {
-          const totalSeconds = Math.floor(parseInt(approxMatch[1], 10) / 1000);
-          duration = formatDuration(totalSeconds);
-          console.log(`[MyTube] Duration from approxDurationMs: ${duration}`);
-        }
-      }
-
-      // 패턴 3: videoDetails.lengthSeconds
-      if (!duration) {
-        const detailsMatch = html.match(/"videoDetails":\s*\{[^}]*"lengthSeconds":\s*"(\d+)"/);
-        if (detailsMatch && detailsMatch[1]) {
-          const totalSeconds = parseInt(detailsMatch[1], 10);
-          duration = formatDuration(totalSeconds);
-          console.log(`[MyTube] Duration from videoDetails: ${duration}`);
-        }
-      }
-
-      console.log(`[MyTube] Direct fetch success for ${videoId}: ${viewCount} views, duration: ${duration || 'N/A'}, date: ${uploadedAt ? new Date(uploadedAt).toLocaleDateString() : 'N/A'}`);
-      return { viewCount, uploadedAt, duration };
+    if (viewCount === 0) {
+      console.log(`[MyTube] No view count data for ${videoId}`);
+      return null;
     }
 
-    // 백업: interactionCount에서 추출 시도
-    const backupMatch = html.match(/"interactionCount":"(\d+)"/);
-    if (backupMatch && backupMatch[1]) {
-      // 백업 경로에서도 duration 시도
-      let duration: string | null = null;
-      const lengthMatch = html.match(/"lengthSeconds":"(\d+)"/);
-      if (lengthMatch && lengthMatch[1]) {
-        duration = formatDuration(parseInt(lengthMatch[1], 10));
-      }
-      return { viewCount: parseInt(backupMatch[1], 10), uploadedAt: null, duration };
-    }
+    console.log(`[MyTube] RYD API success for ${videoId}: ${viewCount} views`);
 
-    console.log(`[MyTube] Could not parse viewCount from ${videoId}`);
-    return null;
+    // RYD API는 조회수만 제공하므로 uploadedAt과 duration은 null
+    return { viewCount, uploadedAt: null, duration: null };
   } catch (err) {
-    console.log(`[MyTube] Direct fetch error for ${videoId}:`, err);
+    console.log(`[MyTube] RYD API error for ${videoId}:`, err);
     return null;
   }
 }
 
 /**
  * 초 단위를 MM:SS 또는 HH:MM:SS 형식으로 변환
+ * (현재 사용되지 않음 - RYD API 전환 후 필요없어짐)
  */
-function formatDuration(totalSeconds: number): string {
-  const hours = Math.floor(totalSeconds / 3600);
-  const minutes = Math.floor((totalSeconds % 3600) / 60);
-  const seconds = totalSeconds % 60;
-
-  if (hours > 0) {
-    return `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-  }
-  return `${minutes}:${seconds.toString().padStart(2, '0')}`;
-}
+// function formatDuration(totalSeconds: number): string {
+//   const hours = Math.floor(totalSeconds / 3600);
+//   const minutes = Math.floor((totalSeconds % 3600) / 60);
+//   const seconds = totalSeconds % 60;
+//
+//   if (hours > 0) {
+//     return `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+//   }
+//   return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+// }
 
 console.log('[MyTube] Background service worker loaded');
 

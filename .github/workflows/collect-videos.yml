@@ -34,6 +34,7 @@ jobs:
         run: npm run collect
         env:
           GITHUB_ACTIONS: true
+          BATCH_SIZE: '100'
 
       - name: Send Telegram notification
         run: npm run telegram-notify

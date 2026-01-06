@@ -7,6 +7,16 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { Innertube } from 'youtubei.js';
 
+// youtubei.js 파서 경고 숨기기 (쇼핑 위젯 등 불필요한 경고)
+const originalWarn = console.warn;
+console.warn = (...args: any[]) => {
+    const msg = args[0]?.toString() || '';
+    if (msg.includes('[YOUTUBEJS]') || msg.includes('Parser')) {
+        return; // 무시
+    }
+    originalWarn.apply(console, args);
+};
+
 // 타입 정의
 interface Channel {
     id: string;
@@ -49,6 +59,46 @@ interface VideosData {
 const DATA_DIR = path.join(process.cwd(), 'data');
 const CHANNELS_FILE = path.join(DATA_DIR, 'channels.json');
 const VIDEOS_FILE = path.join(DATA_DIR, 'videos.json');
+const CHECKPOINT_FILE = path.join(DATA_DIR, 'collect-checkpoint.json');
+
+// 배치 설정: 한 번에 처리할 채널 수 (환경변수로 조절 가능)
+const BATCH_SIZE = parseInt(process.env.BATCH_SIZE || '100');
+
+// 체크포인트 인터페이스
+interface Checkpoint {
+    lastGroupIndex: number;
+    lastChannelIndex: number;
+    collectedVideos: Video[];
+    startedAt: string;
+}
+
+// 체크포인트 저장
+function saveCheckpoint(checkpoint: Checkpoint): void {
+    fs.writeFileSync(CHECKPOINT_FILE, JSON.stringify(checkpoint, null, 2));
+    console.log(`[Checkpoint] Saved: group ${checkpoint.lastGroupIndex}, channel ${checkpoint.lastChannelIndex}, videos ${checkpoint.collectedVideos.length}`);
+}
+
+// 체크포인트 로드
+function loadCheckpoint(): Checkpoint | null {
+    if (fs.existsSync(CHECKPOINT_FILE)) {
+        try {
+            const data = JSON.parse(fs.readFileSync(CHECKPOINT_FILE, 'utf-8'));
+            console.log(`[Checkpoint] Loaded: group ${data.lastGroupIndex}, channel ${data.lastChannelIndex}, videos ${data.collectedVideos?.length || 0}`);
+            return data;
+        } catch {
+            console.log('[Checkpoint] Failed to load checkpoint, starting fresh');
+        }
+    }
+    return null;
+}
+
+// 체크포인트 삭제 (완료 시)
+function clearCheckpoint(): void {
+    if (fs.existsSync(CHECKPOINT_FILE)) {
+        fs.unlinkSync(CHECKPOINT_FILE);
+        console.log('[Checkpoint] Cleared');
+    }
+}
 
 // InnerTube 클라이언트 (전역)
 let youtubeClient: Innertube | null = null;
@@ -152,23 +202,6 @@ async function fetchVideoDetails(videoId: string): Promise<{ viewCount: number; 
     }
 }
 
-// Return YouTube Dislike API로 조회수 가져오기 (빠르고 429 없음)
-async function fetchViewCountFromRYD(videoId: string): Promise<number> {
-    try {
-        const url = `https://returnyoutubedislikeapi.com/votes?videoId=${videoId}`;
-        const response = await fetch(url);
-
-        if (!response.ok) {
-            return 0;
-        }
-
-        const data = await response.json();
-        return data.viewCount || 0;
-    } catch (error) {
-        console.error(`[Collect] RYD API error for ${videoId}:`, error);
-        return 0;
-    }
-}
 
 // 메인 수집 함수
 async function collectVideos(): Promise<void> {
@@ -199,70 +232,121 @@ async function collectVideos(): Promise<void> {
 
     console.log(`[Collect] Existing videos: ${existingIds.size}`);
 
-    // 모든 그룹의 채널에서 영상 수집
-    const allNewVideos: Video[] = [];
+    // 체크포인트 로드 (이전에 중단된 지점에서 재개)
+    const checkpoint = loadCheckpoint();
+    let startGroupIndex = 0;
+    let startChannelIndex = 0;
+    let allNewVideos: Video[] = [];
+
+    if (checkpoint) {
+        startGroupIndex = checkpoint.lastGroupIndex;
+        startChannelIndex = checkpoint.lastChannelIndex + 1; // 마지막 완료된 채널 다음부터
+        allNewVideos = checkpoint.collectedVideos || [];
+
+        // 체크포인트에서 이미 수집한 영상 ID도 existingIds에 추가
+        for (const v of allNewVideos) {
+            existingIds.add(v.id);
+        }
+
+        console.log(`[Collect] Resuming from group ${startGroupIndex}, channel ${startChannelIndex}`);
+        console.log(`[Collect] Already collected ${allNewVideos.length} new videos from previous run`);
+    }
+
     const allUpdatedVideos: Video[] = [...existingVideos];
 
-    for (const group of channelsData.groups) {
+    // 배치 처리를 위한 채널 카운터
+    let processedChannels = 0;
+    let batchComplete = false;
+
+    console.log(`[Collect] Batch size: ${BATCH_SIZE} channels per run`);
+
+    // 모든 그룹의 채널에서 영상 수집
+    for (let groupIndex = startGroupIndex; groupIndex < channelsData.groups.length && !batchComplete; groupIndex++) {
+        const group = channelsData.groups[groupIndex];
         console.log(`[Collect] Processing group: ${group.name} (${group.channels.length} channels)`);
 
-        for (const channel of group.channels) {
-            // RSS로 영상 목록 수집
-            const rssVideos = await fetchRSSVideos(channel, group.id);
+        // 첫 그룹은 체크포인트 위치부터, 이후 그룹은 0부터
+        const channelStartIndex = (groupIndex === startGroupIndex) ? startChannelIndex : 0;
 
-            // 새 영상만 필터링
-            const newVideos = rssVideos.filter(v => !existingIds.has(v.id));
+        for (let channelIndex = channelStartIndex; channelIndex < group.channels.length && !batchComplete; channelIndex++) {
+            const channel = group.channels[channelIndex];
 
-            if (newVideos.length > 0) {
-                console.log(`[Collect] ${newVideos.length} new videos from ${channel.name}`);
+            try {
+                // RSS로 영상 목록 수집
+                const rssVideos = await fetchRSSVideos(channel, group.id);
 
-                // 새 영상들의 상세 정보 수집
-                for (const video of newVideos) {
-                    const details = await fetchVideoDetails(video.id);
-                    if (details) {
-                        video.viewCount = details.viewCount;
-                        video.duration = details.duration;
-                        video.isShorts = details.isShorts;
-                        if (details.isShorts) {
-                            video.url = `https://www.youtube.com/shorts/${video.id}`;
+                // 새 영상만 필터링
+                const newVideos = rssVideos.filter(v => !existingIds.has(v.id));
+
+                if (newVideos.length > 0) {
+                    console.log(`[Collect] ${newVideos.length} new videos from ${channel.name}`);
+
+                    // 새 영상들의 상세 정보 수집
+                    for (const video of newVideos) {
+                        const details = await fetchVideoDetails(video.id);
+                        if (details) {
+                            video.viewCount = details.viewCount;
+                            video.duration = details.duration;
+                            video.isShorts = details.isShorts;
+                            if (details.isShorts) {
+                                video.url = `https://www.youtube.com/shorts/${video.id}`;
+                            }
+                            // 바이럴 스코어 계산
+                            const hoursAge = Math.max(1, (Date.now() - video.uploadedAt) / (1000 * 60 * 60));
+                            video.viralScore = Math.round(video.viewCount / hoursAge);
                         }
-                        // 바이럴 스코어 계산
-                        const hoursAge = Math.max(1, (Date.now() - video.uploadedAt) / (1000 * 60 * 60));
-                        video.viralScore = Math.round(video.viewCount / hoursAge);
+
+                        allNewVideos.push(video);
+                        existingIds.add(video.id);
+
+                        // Rate limiting - 영상당 3초 대기 (429 방지)
+                        await sleep(3000);
                     }
-
-                    allNewVideos.push(video);
-                    existingIds.add(video.id);
-
-                    // Rate limiting - 영상당 3초 대기 (429 방지)
-                    await sleep(3000);
                 }
+
+                // 채널 완료 후 체크포인트 저장
+                processedChannels++;
+                saveCheckpoint({
+                    lastGroupIndex: groupIndex,
+                    lastChannelIndex: channelIndex,
+                    collectedVideos: allNewVideos,
+                    startedAt: checkpoint?.startedAt || new Date().toISOString()
+                });
+
+                console.log(`[Collect] Progress: ${processedChannels}/${BATCH_SIZE} channels this batch`);
+
+                // 배치 크기에 도달하면 중단
+                if (processedChannels >= BATCH_SIZE) {
+                    console.log(`[Collect] Batch limit reached (${BATCH_SIZE} channels). Saving and exiting...`);
+                    batchComplete = true;
+                    break;
+                }
+
+                // 채널간 딜레이 (429 방지)
+                await sleep(5000);
+
+            } catch (error) {
+                console.error(`[Collect] Error processing channel ${channel.name}:`, error);
+
+                // 에러 발생 시에도 현재까지의 진행 상황 저장
+                saveCheckpoint({
+                    lastGroupIndex: groupIndex,
+                    lastChannelIndex: channelIndex - 1, // 실패한 채널 전까지
+                    collectedVideos: allNewVideos,
+                    startedAt: checkpoint?.startedAt || new Date().toISOString()
+                });
+
+                // 에러를 다시 throw하여 프로세스 종료
+                throw error;
             }
-
-            // 채널간 딜레이 (429 방지)
-            await sleep(5000);
         }
     }
 
-    // 기존 영상 조회수 업데이트 (최근 500개만 - RYD API 사용)
-    console.log('[Collect] Updating view counts for recent videos using RYD API...');
-    const recentVideos = allUpdatedVideos
-        .sort((a, b) => b.uploadedAt - a.uploadedAt)
-        .slice(0, 500);
+    // 모든 채널 수집 완료 여부 확인
+    const allChannelsProcessed = !batchComplete;
 
-    for (const video of recentVideos) {
-        // RYD API로 조회수만 빠르게 가져오기
-        const viewCount = await fetchViewCountFromRYD(video.id);
-        if (viewCount > 0) {
-            video.viewCount = viewCount;
-            // 바이럴 스코어 재계산
-            const hoursAge = Math.max(1, (Date.now() - video.uploadedAt) / (1000 * 60 * 60));
-            video.viralScore = Math.round(viewCount / hoursAge);
-        }
-
-        // Rate limiting (RYD는 덜 엄격함)
-        await sleep(200);
-    }
+    // 기존 영상 조회수는 InnerTube API만 사용 (새 영상 수집 시에만 업데이트)
+    console.log('[Collect] Skipping bulk view count update (only new videos updated)');
 
     // 새 영상 추가
     const finalVideos = [...allUpdatedVideos, ...allNewVideos];
@@ -279,7 +363,15 @@ async function collectVideos(): Promise<void> {
 
     fs.writeFileSync(VIDEOS_FILE, JSON.stringify(result, null, 2));
 
-    console.log(`[Collect] Collection complete!`);
+    // 모든 채널 처리 완료 시에만 체크포인트 삭제
+    if (allChannelsProcessed) {
+        clearCheckpoint();
+        console.log(`[Collect] Full cycle complete!`);
+    } else {
+        console.log(`[Collect] Batch complete! Will continue from checkpoint next run.`);
+    }
+
+    console.log(`[Collect] Channels processed this batch: ${processedChannels}`);
     console.log(`[Collect] New videos: ${allNewVideos.length}`);
     console.log(`[Collect] Total videos: ${limitedVideos.length}`);
     console.log(`[Collect] Last updated: ${result.lastUpdated}`);

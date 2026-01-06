@@ -139,6 +139,20 @@ export default function SettingsPanel({ onClose }: SettingsProps) {
                         <div className="text-xs text-gray-400">빠르고 정확함, API 키 필요</div>
                     </div>
                 </label>
+
+                <label className="flex items-center gap-3 p-3 bg-gray-800 rounded-lg cursor-pointer hover:bg-gray-700 transition-colors">
+                    <input
+                        type="radio"
+                        name="dataSource"
+                        checked={settings.dataSource === 'innertube_github'}
+                        onChange={() => handleDataSourceChange('innertube_github')}
+                        className="w-4 h-4 text-red-500"
+                    />
+                    <div>
+                        <div className="font-medium">InnerTube (GitHub 동기화)</div>
+                        <div className="text-xs text-gray-400">429 에러 없음, GitHub 자동수집 데이터 사용</div>
+                    </div>
+                </label>
             </div>
 
             {/* YouTube API 설정 (API 선택 시) */}
@@ -272,6 +286,42 @@ export default function SettingsPanel({ onClose }: SettingsProps) {
                             )}
                             <p className="text-xs text-gray-500">
                                 * GitHub Settings → Developer settings → Personal access tokens → Tokens (classic)에서 <code className="bg-gray-800 px-1 py-0.5 rounded">repo</code> 권한으로 발급
+                            </p>
+                        </div>
+
+                        {/* 영상 데이터 GitHub에 푸시 버튼 */}
+                        <div className="space-y-2 pt-3 border-t border-gray-600">
+                            <button
+                                onClick={async () => {
+                                    const btn = document.getElementById('push-videos-btn') as HTMLButtonElement;
+                                    if (btn) {
+                                        btn.disabled = true;
+                                        btn.textContent = '푸시 중...';
+                                    }
+                                    try {
+                                        const response = await chrome.runtime.sendMessage({ type: 'PUSH_VIDEOS_TO_GITHUB' });
+                                        if (response.success) {
+                                            alert(`✅ ${response.count}개 영상이 GitHub에 푸시되었습니다!`);
+                                        } else {
+                                            alert(`❌ 푸시 실패: ${response.error}`);
+                                        }
+                                    } catch (error) {
+                                        alert(`❌ 오류: ${error}`);
+                                    } finally {
+                                        if (btn) {
+                                            btn.disabled = false;
+                                            btn.textContent = '📤 영상 데이터 GitHub에 푸시';
+                                        }
+                                    }
+                                }}
+                                id="push-videos-btn"
+                                disabled={!githubValid}
+                                className="w-full px-4 py-3 bg-green-600 hover:bg-green-700 disabled:bg-gray-600 disabled:cursor-not-allowed rounded-lg text-sm font-medium transition-colors"
+                            >
+                                📤 영상 데이터 GitHub에 푸시
+                            </button>
+                            <p className="text-xs text-gray-500">
+                                로컬에 저장된 모든 영상 데이터를 GitHub에 업로드합니다
                             </p>
                         </div>
                     </>
