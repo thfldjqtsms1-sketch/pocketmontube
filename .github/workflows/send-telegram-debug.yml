@@ -1,0 +1,63 @@
+name: Send Telegram Notification (Debug)
+
+on:
+  workflow_dispatch:
+    inputs:
+      debug:
+        description: 'Enable debug logging'
+        required: false
+        default: 'true'
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: 'main'
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Debug data status
+        run: |
+          echo "=== Git Status ==="
+          git log --oneline -3
+          echo ""
+          echo "=== Data Files ==="
+          ls -la data/
+          echo ""
+          echo "=== Videos.json Info ==="
+          node -e "
+          const data = JSON.parse(require('fs').readFileSync('data/videos.json', 'utf-8'));
+          console.log('Total videos:', data.videos.length);
+          console.log('Last updated:', data.lastUpdated);
+          const viral = data.videos.filter(v => (v.viralScore || 0) >= 500);
+          console.log('Viral videos:', viral.length);
+          console.log('Top score:', viral[0]?.viralScore);
+          "
+          echo ""
+          echo "=== Channels.json Info ==="
+          node -e "
+          const data = JSON.parse(require('fs').readFileSync('data/channels.json', 'utf-8'));
+          console.log('Groups:', data.groups?.length || 0);
+          "
+
+      - name: Send Telegram notification
+        run: npm run telegram-notify
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          TOP_VIRAL_COUNT: 10
+          VIRAL_THRESHOLD: 500
+          DEBUG: ${{ github.event.inputs.debug }}
