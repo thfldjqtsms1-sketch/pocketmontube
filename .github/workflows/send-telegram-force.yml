@@ -1,0 +1,66 @@
+name: Send Telegram Notification (Force Latest)
+
+on:
+  workflow_dispatch:
+    inputs:
+      force_refresh:
+        description: 'Force refresh latest data'
+        required: false
+        default: 'true'
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Force checkout latest main
+        uses: actions/checkout@v4
+        with:
+          ref: 'main'
+          fetch-depth: 0
+          clean: true
+
+      - name: Verify git state
+        run: |
+          echo "Current branch: $(git branch --show-current)"
+          echo "Latest commit: $(git log --oneline -1)"
+          echo "Working directory clean: $(git status --porcelain | wc -l)"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Clean install
+        run: rm -rf node_modules package-lock.json && npm install
+
+      - name: Verify data files
+        run: |
+          echo "=== Data file sizes ==="
+          ls -lh data/
+          echo ""
+          echo "=== Videos.json sample ==="
+          head -10 data/videos.json
+          echo ""
+          echo "=== Viral video count ==="
+          node -e "
+          const data = JSON.parse(require('fs').readFileSync('data/videos.json', 'utf-8'));
+          const viral = data.videos.filter(v => (v.viralScore || 0) >= 500);
+          console.log('Total videos:', data.videos.length);
+          console.log('Viral videos:', viral.length);
+          console.log('Top viral score:', viral[0]?.viralScore);
+          console.log('Last updated:', data.lastUpdated);
+          "
+
+      - name: Send Telegram notification with forced data
+        run: |
+          echo "Sending notification with latest data..."
+          npm run telegram-notify
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          TOP_VIRAL_COUNT: 10
+          VIRAL_THRESHOLD: 500
+          FORCE_LATEST: ${{ github.event.inputs.force_refresh }}
