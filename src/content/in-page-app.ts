@@ -314,7 +314,7 @@ export class InPageApp {
             </select>
             <select class="pocketmontube-viewsource-select" title="데이터 수집 방식">
               <option value="youtube_api">🎬 YouTube API (빠름)</option>
-              <option value="returnyoutubedislike">📊 RYD API</option>
+              <option value="innertube">🔗 InnerTube API</option>
               <option value="directfetch">🔍 직접 HTTP (정확)</option>
             </select>
           </div>
@@ -402,19 +402,25 @@ export class InPageApp {
 
     // 조회수 소스 변경 (dataSource도 함께 업데이트)
     this.currentOverlay.querySelector('.pocketmontube-viewsource-select')?.addEventListener('change', async (e) => {
-      const value = (e.target as HTMLSelectElement).value as 'youtube_api' | 'returnyoutubedislike' | 'directfetch';
+      const value = (e.target as HTMLSelectElement).value as 'youtube_api' | 'innertube' | 'directfetch';
 
       if (value === 'youtube_api') {
         // YouTube API 선택 시 dataSource도 youtube_api로 설정
         await StorageManager.updateSettings({
           dataSource: 'youtube_api',
-          viewCountSource: 'returnyoutubedislike'  // API 사용 시 viewCountSource는 의미없지만 저장
+          viewCountSource: 'directfetch'
+        });
+      } else if (value === 'innertube') {
+        // InnerTube API 선택 시 → GitHub Actions에서 수집한 데이터 사용
+        await StorageManager.updateSettings({
+          dataSource: 'innertube_github',
+          viewCountSource: 'directfetch'
         });
       } else {
-        // 다른 옵션 선택 시 dataSource는 html로, viewCountSource는 선택한 값으로
+        // 직접 HTTP 선택 시
         await StorageManager.updateSettings({
           dataSource: 'html',
-          viewCountSource: value as 'returnyoutubedislike' | 'directfetch'
+          viewCountSource: 'directfetch'
         });
       }
       console.log('[InPageApp] Data source changed to:', value);
@@ -424,11 +430,13 @@ export class InPageApp {
     StorageManager.getSettings().then(settings => {
       const select = this.currentOverlay?.querySelector('.pocketmontube-viewsource-select') as HTMLSelectElement;
       if (select) {
-        // dataSource가 youtube_api면 youtube_api 선택, 아니면 viewCountSource 값 사용
+        // dataSource에 따라 드롭다운 선택
         if (settings.dataSource === 'youtube_api') {
           select.value = 'youtube_api';
-        } else if (settings.viewCountSource) {
-          select.value = settings.viewCountSource;
+        } else if (settings.dataSource === 'innertube_github') {
+          select.value = 'innertube';
+        } else {
+          select.value = 'directfetch';
         }
       }
     });
@@ -457,6 +465,20 @@ export class InPageApp {
         btn.disabled = true;
         btn.classList.add('spinning');
       }
+
+      // InnerTube 진행률 메시지 리스너
+      const progressListener = (message: any) => {
+        if (message.type === 'INNERTUBE_PROGRESS') {
+          console.log('[InPageApp] Progress update:', message);
+          // InnerTube 진행률 표시 (현재 그룹에만)
+          if (message.groupId === this.currentGroupId && lastUpdateEl) {
+            lastUpdateEl.textContent = `🔄 업데이트 중 (${message.current}/${message.total})`;
+            (lastUpdateEl as HTMLElement).style.color = '#4CAF50';
+            (lastUpdateEl as HTMLElement).style.fontWeight = 'bold';
+          }
+        }
+      };
+      chrome.runtime.onMessage.addListener(progressListener);
 
       try {
         if (lastUpdateEl) {
@@ -489,6 +511,7 @@ export class InPageApp {
           lastUpdateEl.textContent = '❌ 업데이트 실패';
         }
       } finally {
+        chrome.runtime.onMessage.removeListener(progressListener);
         if (btn) {
           btn.disabled = false;
           btn.classList.remove('spinning');

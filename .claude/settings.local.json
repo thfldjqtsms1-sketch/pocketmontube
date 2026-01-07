@@ -22,7 +22,13 @@
       "Bash(node test-innertube.js:*)",
       "Bash(node test-collect-100.js:*)",
       "Bash(findstr:*)",
-      "Bash(tee:*)"
+      "Bash(tee:*)",
+      "Bash(gh run view:*)",
+      "Bash(git stash:*)",
+      "Bash(gh run watch:*)",
+      "Bash(set DOWNLOAD_TOKEN=mytoken123)",
+      "Bash(python:*)",
+      "Bash(git log:*)"
     ]
   }
 }

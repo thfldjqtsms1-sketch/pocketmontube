@@ -39,6 +39,8 @@ const VIDEOS_FILE = path.join(DATA_DIR, 'videos.json');
 const CHANNELS_FILE = path.join(DATA_DIR, 'channels.json');
 const VIRAL_THRESHOLD = parseInt(process.env.VIRAL_THRESHOLD || '500'); // 기본값: 500/h
 const TOP_COUNT = parseInt(process.env.TOP_VIRAL_COUNT || '10'); // 상위 10개
+const HIGH_VIRAL_THRESHOLD = 2000;  // 2000/h 이상 = 초고속 바이럴 🚀
+const NEW_VIDEO_HOURS = 24;          // 24시간 이내 = 새 영상 🆕
 
 /**
  * Telegram으로 메시지 전송
@@ -92,9 +94,12 @@ function formatViralVideosByGroup(videosByGroup: Map<string, { group: Group; vid
         message += `${icon} <b>${escapeHtml(group.name)}</b>\n`;
         message += `━━━━━━━━━━━━━━━━━━━━\n\n`;
 
+        // 바이럴 기준 이상인 영상만 필터링
+        const viralVideos = videos.filter(v => (v.viralScore || 0) >= VIRAL_THRESHOLD);
+
         // 그룹별 표시 개수 (기본값: 3)
         const topCount = group.topCount || 3;
-        const displayVideos = videos.slice(0, topCount);
+        const displayVideos = viralVideos.slice(0, topCount);
 
         displayVideos.forEach((video, index) => {
             const viralScore = video.viralScore || 0;
@@ -107,15 +112,29 @@ function formatViralVideosByGroup(videosByGroup: Map<string, { group: Group; vid
                 ? `${daysAgo}일 전`
                 : `${hoursAgo}시간 전`;
 
-            message += `${rank} <b>${escapeHtml(video.title)}</b>\n`;
+            // 고득점 바이럴 & 새 영상 강조 표시
+            const isHighViral = viralScore >= HIGH_VIRAL_THRESHOLD;
+            const isNewVideo = hoursAgo < NEW_VIDEO_HOURS;
+
+            // 제목 라인 구성
+            let titleLine = `${rank} `;
+            if (isHighViral) {
+                titleLine += `🚀🔥 `;
+            }
+            if (isNewVideo) {
+                titleLine += `🆕 `;
+            }
+            titleLine += `<b>${escapeHtml(video.title)}</b>\n`;
+
+            message += titleLine;
             message += `📅 ${uploadTime}\n`;
             message += `👁 ${formatNumber(video.viewCount)}회\n`;
             message += `🔥 ${formatNumber(viralScore)}/h\n`;
             message += `<a href="${video.url}">🔗 영상 보기</a>\n\n`;
         });
 
-        message += `📈 총 ${videos.length}개\n\n`;
-        totalVideos += videos.length;
+        message += `📈 바이럴 ${viralVideos.length}개 / 전체 ${videos.length}개\n\n`;
+        totalVideos += viralVideos.length;
     }
 
     message += `━━━━━━━━━━━━━━━━━━━━\n`;

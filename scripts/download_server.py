@@ -55,19 +55,28 @@ def clean_vtt_to_text(vtt_path):
     with open(vtt_path, 'r', encoding='utf-8') as f:
         content = f.read()
     
-    # 타임스탬프 패턴 제거 (00:00:00.000 --> 00:00:00.000)
-    content = re.sub(r'\d{2}:\d{2}:\d{2}\.\d{3}\s*-->\s*\d{2}:\d{2}:\d{2}\.\d{3}.*\n?', '', content)
-    
     # VTT 헤더 제거
     content = re.sub(r'^WEBVTT\s*\n?', '', content)
     content = re.sub(r'^Kind:.*\n?', '', content, flags=re.MULTILINE)
     content = re.sub(r'^Language:.*\n?', '', content, flags=re.MULTILINE)
     
-    # HTML 태그 제거 (<c>, </c>, <00:00:00.000> 등)
+    # 타임스탬프 라인 제거 (00:00:34.549 --> 00:00:34.559 align:start position:0%)
+    content = re.sub(r'\d{2}:\d{2}:\d{2}\.\d{3}\s*-->\s*\d{2}:\d{2}:\d{2}\.\d{3}[^\n]*\n?', '', content)
+    
+    # 인라인 타임스탬프 태그 제거 (<00:00:34.960> 등)
+    content = re.sub(r'<\d{2}:\d{2}:\d{2}\.\d{3}>', '', content)
+    
+    # <c>, </c> 태그 제거
+    content = re.sub(r'</?c>', '', content)
+    
+    # 모든 HTML 태그 제거
     content = re.sub(r'<[^>]+>', '', content)
     
-    # HTML 엔티티 디코딩  (&gt; -> >, &lt; -> <, &amp; -> &)
+    # HTML 엔티티 디코딩 (&gt; -> >, &lt; -> <, &amp; -> &)
     content = content.replace('&gt;', '>').replace('&lt;', '<').replace('&amp;', '&')
+    
+    # >> 화자 표시 제거
+    content = re.sub(r'^>>\s*', '', content, flags=re.MULTILINE)
     
     # 위치/정렬 태그 제거 (align:start position:0% 등)
     content = re.sub(r'align:\w+\s*', '', content)
@@ -250,15 +259,12 @@ def health():
 
 if __name__ == '__main__':
     print("=" * 50)
-    print("🚀 PocketMonTube 다운로드 서버")
+    print("PocketMonTube Download Server")
     print("=" * 50)
-    print(f"📁 다운로드 폴더: {DOWNLOAD_DIR}")
-    print(f"🌐 서버 주소: http://localhost:9527")
+    print(f"Download Dir: {DOWNLOAD_DIR}")
+    print(f"Server URL: http://localhost:9527")
     print("")
-    print("Chrome 확장에서 다운로드 버튼을 누르면")
-    print("여기서 자동으로 다운로드가 시작됩니다!")
-    print("")
-    print("종료하려면 Ctrl+C를 누르세요.")
+    print("Press Ctrl+C to stop")
     print("=" * 50)
-    
+
     app.run(host='127.0.0.1', port=9527, debug=False)

@@ -27,20 +27,27 @@ SUBS_DIR = DATA_DIR / "subtitles"
 
 
 def clean_vtt_content(content):
-    """VTT 내용에서 텍스트만 추출"""
-    # 타임스탬프 제거
-    content = re.sub(r'\d{2}:\d{2}:\d{2}\.\d{3}\s*-->\s*\d{2}:\d{2}:\d{2}\.\d{3}.*\n?', '', content)
-    
+    """VTT 내용에서 텍스트만 추출 (정규식 개선)"""
     # VTT 헤더 제거
     content = re.sub(r'^WEBVTT\s*\n?', '', content)
     content = re.sub(r'^Kind:.*\n?', '', content, flags=re.MULTILINE)
     content = re.sub(r'^Language:.*\n?', '', content, flags=re.MULTILINE)
     
-    # HTML 태그 제거
+    # 타임스탬프 라인 제거 (00:00:34.549 --> 00:00:34.559 align:start position:0%)
+    content = re.sub(r'\d{2}:\d{2}:\d{2}\.\d{3}\s*-->\s*\d{2}:\d{2}:\d{2}\.\d{3}[^\n]*\n?', '', content)
+    
+    # 인라인 타임스탬프 태그 제거 (<00:00:34.960><c> 등)
+    content = re.sub(r'<\d{2}:\d{2}:\d{2}\.\d{3}>', '', content)
+    content = re.sub(r'</?c>', '', content)
+    
+    # 모든 HTML 태그 제거
     content = re.sub(r'<[^>]+>', '', content)
     
     # HTML 엔티티 디코딩
     content = content.replace('&gt;', '>').replace('&lt;', '<').replace('&amp;', '&')
+    
+    # >> 화자 표시 제거 (선택사항 - 원하면 유지 가능)
+    content = re.sub(r'^>>\s*', '', content, flags=re.MULTILINE)
     
     # 위치 태그 제거
     content = re.sub(r'align:\w+\s*', '', content)
@@ -53,8 +60,10 @@ def clean_vtt_content(content):
     
     for line in lines:
         line = line.strip()
+        # 빈 줄 또는 숫자만 있는 줄(큐 번호) 스킵
         if not line or re.match(r'^\d+$', line):
             continue
+        # 중복 줄 스킵
         if line != prev_line:
             cleaned_lines.append(line)
             prev_line = line
