@@ -62,7 +62,7 @@ const VIDEOS_FILE = path.join(DATA_DIR, 'videos.json');
 const CHECKPOINT_FILE = path.join(DATA_DIR, 'collect-checkpoint.json');
 
 // 배치 설정: 한 번에 처리할 채널 수 (환경변수로 조절 가능)
-const BATCH_SIZE = parseInt(process.env.BATCH_SIZE || '100');
+const BATCH_SIZE = 20;
 
 // 체크포인트 인터페이스
 interface Checkpoint {
