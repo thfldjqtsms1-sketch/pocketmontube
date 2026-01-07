@@ -103,6 +103,96 @@ function clearCheckpoint(): void {
 // InnerTube 클라이언트 (전역)
 let youtubeClient: Innertube | null = null;
 
+// ============================================
+// 에러 로그 시스템
+// ============================================
+interface CollectError {
+    timestamp: string;
+    type: 'video' | 'channel' | 'rss';
+    id: string;
+    name: string;
+    error: string;
+    attempts: number;
+}
+
+interface CollectStats {
+    startedAt: string;
+    lastUpdated: string;
+    channelsProcessed: number;
+    channelsTotal: number;
+    videosCollected: number;
+    videosUpdated: number;
+    errors: number;
+    retries: number;
+}
+
+const ERRORS_FILE = path.join(DATA_DIR, 'collect-errors.json');
+const STATS_FILE = path.join(DATA_DIR, 'collect-stats.json');
+
+// 수집 통계 (런타임)
+let collectStats: CollectStats = {
+    startedAt: new Date().toISOString(),
+    lastUpdated: new Date().toISOString(),
+    channelsProcessed: 0,
+    channelsTotal: 0,
+    videosCollected: 0,
+    videosUpdated: 0,
+    errors: 0,
+    retries: 0
+};
+
+function logCollectError(
+    id: string, 
+    name: string, 
+    error: Error | null, 
+    attempts: number, 
+    type: 'video' | 'channel' | 'rss' = 'video'
+): void {
+    try {
+        const errorLog: CollectError = {
+            timestamp: new Date().toISOString(),
+            type,
+            id,
+            name,
+            error: error?.message?.substring(0, 200) || 'Unknown error',
+            attempts
+        };
+
+        let errors: CollectError[] = [];
+        if (fs.existsSync(ERRORS_FILE)) {
+            try {
+                errors = JSON.parse(fs.readFileSync(ERRORS_FILE, 'utf-8'));
+            } catch {
+                errors = [];
+            }
+        }
+        
+        errors.push(errorLog);
+        // 최근 500개만 유지
+        errors = errors.slice(-500);
+        fs.writeFileSync(ERRORS_FILE, JSON.stringify(errors, null, 2));
+        
+        collectStats.errors++;
+        console.log(`[ErrorLog] Saved: ${type} ${id} (${name}) - ${errorLog.error.substring(0, 50)}`);
+    } catch (e) {
+        console.error('[ErrorLog] Failed to save error log:', e);
+    }
+}
+
+function saveStats(): void {
+    try {
+        collectStats.lastUpdated = new Date().toISOString();
+        fs.writeFileSync(STATS_FILE, JSON.stringify(collectStats, null, 2));
+    } catch (e) {
+        console.error('[Stats] Failed to save stats:', e);
+    }
+}
+
+function logProgress(message: string): void {
+    const timestamp = new Date().toISOString().substring(11, 19); // HH:MM:SS
+    console.log(`[${timestamp}] ${message}`);
+}
+
 // 유틸리티 함수
 function sleep(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -178,35 +268,94 @@ async function fetchRSSVideos(channel: Channel, groupId: string): Promise<Video[
     return videos;
 }
 
-// 영상 상세 정보 가져오기 (InnerTube API 사용)
-async function fetchVideoDetails(videoId: string): Promise<{ viewCount: number; duration: string; isShorts: boolean } | null> {
-    try {
-        // InnerTube 클라이언트 초기화 (처음 한 번만)
-        if (!youtubeClient) {
-            console.log('[Collect] Initializing InnerTube client...');
-            youtubeClient = await Innertube.create();
+// ============================================
+// 영상 상세 정보 수집 (재시도 로직 포함)
+// ============================================
+async function fetchVideoDetails(
+    videoId: string, 
+    channelName: string = 'Unknown',
+    maxRetries: number = 2
+): Promise<{ viewCount: number; duration: string; isShorts: boolean } | null> {
+    let lastError: Error | null = null;
+    
+    for (let attempt = 1; attempt <= maxRetries + 1; attempt++) {
+        try {
+            // InnerTube 클라이언트 초기화 (처음 한 번 또는 재생성 필요시)
+            if (!youtubeClient) {
+                logProgress(`[InnerTube] Initializing client...`);
+                youtubeClient = await Innertube.create();
+                logProgress(`[InnerTube] Client ready`);
+            }
+
+            const info = await youtubeClient.getInfo(videoId);
+            const basicInfo = info.basic_info;
+
+            const viewCount = parseInt(basicInfo.view_count as any) || 0;
+            const totalSeconds = basicInfo.duration || 0;
+            const duration = formatDuration(totalSeconds);
+            const isShorts = (basicInfo as any).is_short || totalSeconds < 180;
+
+            // viewCount=0이고 재시도 가능하면 재시도
+            // (신규 영상이 아닌 이상 viewCount=0은 API 문제일 가능성 높음)
+            if (viewCount === 0 && attempt <= maxRetries) {
+                const delay = 30000 * attempt; // 30초, 60초
+                collectStats.retries++;
+                logProgress(`[Retry] ${videoId} viewCount=0, attempt ${attempt}/${maxRetries+1}, waiting ${delay/1000}s...`);
+                await sleep(delay);
+                continue;
+            }
+
+            // 성공 로그 (재시도 후 성공한 경우)
+            if (attempt > 1) {
+                logProgress(`[Success] ${videoId} succeeded on attempt ${attempt} - views: ${viewCount}`);
+            }
+
+            return { viewCount, duration, isShorts };
+            
+        } catch (error: any) {
+            lastError = error;
+            const errorMsg = error.message || String(error);
+            const shortError = errorMsg.substring(0, 80);
+            
+            console.error(`[Error] ${videoId} attempt ${attempt}/${maxRetries+1}: ${shortError}`);
+
+            if (attempt <= maxRetries) {
+                collectStats.retries++;
+                
+                // 429 (Rate Limit) 에러 감지
+                const is429 = errorMsg.includes('429') || 
+                              errorMsg.includes('rate') || 
+                              errorMsg.includes('Too Many');
+                
+                if (is429) {
+                    const delay = 60000 * attempt; // 60초, 120초
+                    logProgress(`[RateLimit] 429 detected! Waiting ${delay/1000}s, recreating client...`);
+                    youtubeClient = null; // 클라이언트 재생성
+                    await sleep(delay);
+                } else {
+                    const delay = 30000 * attempt; // 30초, 60초
+                    logProgress(`[Retry] Waiting ${delay/1000}s before retry...`);
+                    await sleep(delay);
+                }
+            }
         }
-
-        const info = await youtubeClient.getInfo(videoId);
-        const basicInfo = info.basic_info;
-
-        const viewCount = parseInt(basicInfo.view_count as any) || 0;
-        const totalSeconds = basicInfo.duration || 0;
-        const duration = formatDuration(totalSeconds);
-        const isShorts = (basicInfo as any).is_short || totalSeconds < 180;
-
-        return { viewCount, duration, isShorts };
-    } catch (error: any) {
-        console.warn(`[Collect] InnerTube failed for ${videoId}: ${error.message}`);
-        return null;
     }
+
+    // 모든 재시도 실패
+    logCollectError(videoId, channelName, lastError, maxRetries + 1, 'video');
+    logProgress(`[Failed] ${videoId} (${channelName}) after ${maxRetries + 1} attempts - will retry next cycle`);
+    
+    return null;
 }
 
 
 // 메인 수집 함수
 async function collectVideos(): Promise<void> {
-    console.log('[Collect] Starting video collection...');
-    console.log(`[Collect] Current directory: ${process.cwd()}`);
+    console.log('='.repeat(60));
+    logProgress('[Collect] Starting video collection...');
+    logProgress(`[Collect] Working directory: ${process.cwd()}`);
+    logProgress(`[Collect] Batch size: ${BATCH_SIZE} channels`);
+    console.log('='.repeat(60));
 
     // 채널 목록 로드
     if (!fs.existsSync(CHANNELS_FILE)) {
@@ -283,7 +432,7 @@ async function collectVideos(): Promise<void> {
 
                     // 새 영상들의 상세 정보 수집
                     for (const video of newVideos) {
-                        const details = await fetchVideoDetails(video.id);
+                        const details = await fetchVideoDetails(video.id, channel.name);
                         if (details) {
                             video.viewCount = details.viewCount;
                             video.duration = details.duration;
@@ -299,13 +448,16 @@ async function collectVideos(): Promise<void> {
                         allNewVideos.push(video);
                         existingIds.add(video.id);
 
-                        // Rate limiting - 영상당 3초 대기 (429 방지)
-                        await sleep(3000);
+                        collectStats.videosCollected++;
+                        
+                        // Rate limiting - 영상당 5초 대기 (429 방지)
+                        await sleep(5000);
                     }
                 }
 
                 // 채널 완료 후 체크포인트 저장
                 processedChannels++;
+                collectStats.channelsProcessed++;
                 saveCheckpoint({
                     lastGroupIndex: groupIndex,
                     lastChannelIndex: channelIndex,
@@ -313,27 +465,46 @@ async function collectVideos(): Promise<void> {
                     startedAt: checkpoint?.startedAt || new Date().toISOString()
                 });
 
-                // 20개마다 진행 상황 로그 출력
-                if (processedChannels % 20 === 0) {
-                    console.log(`[Collect] Progress: ${processedChannels} channels processed...`);
+                // 10개마다 상세 진행 상황 로그 출력
+                if (processedChannels % 10 === 0 || processedChannels === 1) {
+                    const elapsed = Math.round((Date.now() - new Date(collectStats.startedAt).getTime()) / 1000);
+                    const progress = `${processedChannels}/${BATCH_SIZE} channels`;
+                    const stats = `new: ${allNewVideos.length}, errors: ${collectStats.errors}, retries: ${collectStats.retries}`;
+                    logProgress(`[Progress] ${progress} | ${stats} | elapsed: ${elapsed}s`);
+                    saveStats();
                 }
 
-                // 채널간 딜레이 (429 방지)
-                await sleep(5000);
+                // 채널간 딜레이 (429 방지) - 10초로 증가
+                await sleep(10000);
 
-            } catch (error) {
-                console.error(`[Collect] Error processing channel ${channel.name}:`, error);
+            } catch (error: any) {
+                const errorMsg = error.message || String(error);
+                console.error(`[ChannelError] ${channel.name} (${channel.id}): ${errorMsg.substring(0, 100)}`);
+                
+                // 에러 로그 저장
+                logCollectError(channel.id, channel.name, error, 0, 'channel');
 
-                // 에러 발생 시에도 현재까지의 진행 상황 저장
+                // 체크포인트 저장 (현재 채널까지 시도한 것으로)
                 saveCheckpoint({
                     lastGroupIndex: groupIndex,
-                    lastChannelIndex: channelIndex - 1, // 실패한 채널 전까지
+                    lastChannelIndex: channelIndex,
                     collectedVideos: allNewVideos,
                     startedAt: checkpoint?.startedAt || new Date().toISOString()
                 });
 
-                // 에러를 다시 throw하여 프로세스 종료
-                throw error;
+                // 429 에러면 더 긴 대기
+                const is429 = errorMsg.includes('429') || errorMsg.includes('rate') || errorMsg.includes('Too Many');
+                const waitTime = is429 ? 60000 : 30000;
+                
+                logProgress(`[Recovery] Waiting ${waitTime/1000}s before next channel...`);
+                await sleep(waitTime);
+                
+                // 429면 클라이언트 재생성
+                if (is429) {
+                    youtubeClient = null;
+                }
+                
+                continue;  // throw error 대신 continue - 다음 채널로
             }
         }
     }
@@ -370,7 +541,7 @@ async function collectVideos(): Promise<void> {
 
     let updatedCount = 0;
     for (const video of toUpdate) {
-        const details = await fetchVideoDetails(video.id);
+        const details = await fetchVideoDetails(video.id, video.channelName);
         if (details && details.viewCount > 0) {
             video.viewCount = details.viewCount;
             video.duration = details.duration;
@@ -382,9 +553,10 @@ async function collectVideos(): Promise<void> {
             const hoursAge = Math.max(1, (Date.now() - video.uploadedAt) / (1000 * 60 * 60));
             video.viralScore = Math.round(video.viewCount / hoursAge);
             updatedCount++;
+            collectStats.videosUpdated++;
         }
-        // Rate limiting
-        await sleep(3000);
+        // Rate limiting - 5초로 증가
+        await sleep(5000);
     }
 
     console.log(`[Collect] Updated ${updatedCount} existing videos`);
@@ -407,21 +579,26 @@ async function collectVideos(): Promise<void> {
     // 모든 채널 처리 완료 시에만 체크포인트 삭제
     if (allChannelsProcessed) {
         clearCheckpoint();
-        console.log(`[Collect] Full cycle complete!`);
+        logProgress(`[Complete] Full cycle complete! Telegram notification will be sent.`);
     } else {
-        console.log(`[Collect] Batch complete! Will continue from checkpoint next run.`);
+        logProgress(`[Batch] Batch complete. Will continue from checkpoint next run.`);
     }
 
     // 전체 채널 수 계산
     const totalChannels = channelsData.groups.reduce((sum, g) => sum + g.channels.length, 0);
 
-    // 전체 사이클 완료 시 → 바이럴 영상 알림은 telegram-notify 스크립트가 처리
-    // (중간 진행률 보고는 제거됨 - 완료 시에만 알림)
-
-    console.log(`[Collect] Channels processed this batch: ${processedChannels}`);
-    console.log(`[Collect] New videos: ${allNewVideos.length}`);
-    console.log(`[Collect] Total videos: ${limitedVideos.length}`);
-    console.log(`[Collect] Last updated: ${result.lastUpdated}`);
+    // 최종 요약 출력
+    console.log('='.repeat(60));
+    logProgress(`[Summary] Channels processed: ${processedChannels}/${totalChannels}`);
+    logProgress(`[Summary] New videos: ${allNewVideos.length}`);
+    logProgress(`[Summary] Updated videos: ${updatedCount}`);
+    logProgress(`[Summary] Total videos: ${limitedVideos.length}`);
+    logProgress(`[Summary] Errors: ${collectStats.errors}`);
+    logProgress(`[Summary] Retries: ${collectStats.retries}`);
+    logProgress(`[Summary] Last updated: ${result.lastUpdated}`);
+    console.log('='.repeat(60));
+    
+    saveStats();
 }
 
 // 실행
