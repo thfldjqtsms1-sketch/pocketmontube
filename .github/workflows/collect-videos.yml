@@ -10,7 +10,7 @@ on:
 jobs:
   collect:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 120
     permissions:
       contents: write
 
@@ -36,7 +36,7 @@ jobs:
         run: npm run collect
         env:
           GITHUB_ACTIONS: true
-          BATCH_SIZE: '20'
+          BATCH_SIZE: '10'
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
 
@@ -61,10 +61,17 @@ jobs:
           TOP_VIRAL_COUNT: 10
         continue-on-error: true
 
+      - name: Remove checkpoint before commit
+        run: |
+          rm -f data/collect-checkpoint.json
+          rm -f data/collect-errors.json
+          rm -f data/collect-stats.json
+
       - name: Commit and push changes
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: 'chore: auto-collect videos [skip ci]'
           file_pattern: 'data/*.json'
+          skip_fetch: true
           commit_user_name: 'GitHub Actions Bot'
           commit_user_email: 'actions@github.com'
