@@ -376,6 +376,11 @@
           "id": "@%EC%82%AC%EC%9D%B4%EB%8B%A4%ED%95%A0%EB%A7%A4TV",
           "name": "사이다 할매TV",
           "thumbnail": "https://yt3.googleusercontent.com/x63m1o0dKxc23jM4V4ovwSG-ZA3KG2u8Is59VUWZidzAtHkh6NKaoySFfFWtb5E3OeX3V6_c-GU=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "@%EC%9C%A0%EB%A8%B8%EB%AF%BC%EA%B5%AD2025",
+          "name": "유머민국",
+          "thumbnail": "https://yt3.googleusercontent.com/ZS6Bp9pTvTeW5SNN98CPM3rp4Yi5t4G5WEncPRRfr-qC-oKstPqdKC4vuOdjXVtkvD_l6GFIzpg=s160-c-k-c0x00ffffff-no-rj"
         }
       ]
     },
@@ -703,5 +708,5 @@
       ]
     }
   ],
-  "lastExported": "2026-01-07T05:32:24.203Z"
+  "lastExported": "2026-01-12T18:13:42.187Z"
 }
