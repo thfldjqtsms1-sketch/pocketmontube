@@ -381,6 +381,11 @@
           "id": "@%EC%9C%A0%EB%A8%B8%EB%AF%BC%EA%B5%AD2025",
           "name": "유머민국",
           "thumbnail": "https://yt3.googleusercontent.com/ZS6Bp9pTvTeW5SNN98CPM3rp4Yi5t4G5WEncPRRfr-qC-oKstPqdKC4vuOdjXVtkvD_l6GFIzpg=s160-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "id": "@%EC%9A%B0%ED%9B%84%ED%9B%97%EC%9C%A0%EB%A8%B8",
+          "name": "우후훗 유머",
+          "thumbnail": "https://yt3.googleusercontent.com/b_x11yY9Tnz7FUEc7CIamrGLS6iqX2Zvw9qNVQHfznuzaVC_3_QwO67fb3fdIxadACL5c26B6A=s160-c-k-c0x00ffffff-no-rj"
         }
       ]
     },
@@ -708,5 +713,5 @@
       ]
     }
   ],
-  "lastExported": "2026-01-26T11:28:29.673Z"
+  "lastExported": "2026-03-06T00:17:21.578Z"
 }
